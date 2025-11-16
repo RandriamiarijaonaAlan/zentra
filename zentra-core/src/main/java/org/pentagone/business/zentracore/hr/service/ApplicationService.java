@@ -20,3 +20,4 @@ public interface ApplicationService {
 
     EmployeeDto acceptByApplicationId(Long applicationId);
 }
+
