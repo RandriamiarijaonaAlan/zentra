@@ -20,4 +20,8 @@ public class ContractDto {
     private Integer annualLeaveDays;
     private LocalDate signatureDate;
     private String contractFile;
+    private String contractType;
+    private Integer durationMonths;
+    private Integer trialPeriodMonths;
+    private Boolean renewable;
 }
