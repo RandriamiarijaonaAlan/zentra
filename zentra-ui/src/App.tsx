@@ -26,6 +26,7 @@ import LeaveRequestForm from './pages/LeaveRequestForm';
 import LeaveCalendar from './pages/LeaveCalendar';
 import LeaveDashboard from './pages/LeaveDashboard';
 import LeaveApproval from './pages/LeaveApproval';
+import LeaveNotifications from './pages/LeaveNotifications';
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
           <Route path="leaves/requests/pending" element={<LeaveRequestList showEmployeeColumn={true} />} />
           <Route path="leaves/requests/:requestId/approve" element={<LeaveApproval />} />
           <Route path="leaves/calendar" element={<LeaveCalendar />} />
+          <Route path="leaves/notifications" element={<LeaveNotifications />} />
         </Route>
       </Routes>
     </BrowserRouter>

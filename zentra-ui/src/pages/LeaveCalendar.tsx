@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { get } from '../services/api';
-import type { LeaveRequestDto } from '../types';
+import type { LeaveRequestDto, LeaveTypeDto } from '../types';
 import EmployeeSelector from '../components/EmployeeSelector';
 import '../styles/LeaveCalendar.css';
 
@@ -9,10 +9,26 @@ export default function LeaveCalendar() {
   const [leaves, setLeaves] = useState<LeaveRequestDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number>(1);
+  const [leaveTypes, setLeaveTypes] = useState<LeaveTypeDto[]>([]);
+  const [legendError, setLegendError] = useState<string>('');
 
   useEffect(() => {
     loadLeaves();
   }, [currentDate, selectedEmployeeId]);
+
+  // Charger la légende dynamiquement (types actifs)
+  useEffect(() => {
+    const loadLegend = async () => {
+      try {
+        const types = await get<LeaveTypeDto[]>('/leave-types/active');
+        setLeaveTypes(types);
+      } catch (e) {
+        setLegendError("Impossible de charger les types de congés");
+        setLeaveTypes([]);
+      }
+    };
+    loadLegend();
+  }, []);
 
   const loadLeaves = async () => {
     setLoading(true);
@@ -198,26 +214,23 @@ export default function LeaveCalendar() {
             </div>
           </div>
 
-          {/* Legend */}
+          {/* Legend dynamique */}
           <div className="calendar-legend">
             <div className="legend-title">Légende</div>
+            {legendError && <div className="alert alert-warning">{legendError}</div>}
             <div className="legend-items">
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#007bff' }}></div>
-                <span className="legend-label">Congés payés</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#28a745' }}></div>
-                <span className="legend-label">RTT</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#ffc107' }}></div>
-                <span className="legend-label">Congés maladie</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#dc3545' }}></div>
-                <span className="legend-label">Congés exceptionnels</span>
-              </div>
+              {leaveTypes.length === 0 && !legendError && (
+                <div className="legend-item">
+                  <div className="legend-color" style={{ backgroundColor: '#999' }}></div>
+                  <span className="legend-label">Types non chargés</span>
+                </div>
+              )}
+              {leaveTypes.map((lt) => (
+                <div key={lt.id} className="legend-item">
+                  <div className="legend-color" style={{ backgroundColor: lt.color || '#007bff' }}></div>
+                  <span className="legend-label">{lt.name}</span>
+                </div>
+              ))}
             </div>
           </div>
         </>
