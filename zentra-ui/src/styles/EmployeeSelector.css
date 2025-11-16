@@ -1,0 +1,190 @@
+.employee-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.employee-selector-label {
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+  font-size: 0.938rem;
+}
+
+.employee-selector-dropdown {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+
+.employee-selector-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.938rem;
+}
+
+.employee-selector-button:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.employee-selector-button:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.selected-employee-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+}
+
+.employee-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.employee-email {
+  font-size: 0.813rem;
+  color: #6c757d;
+}
+
+.chevron-icon {
+  width: 18px;
+  height: 18px;
+  color: #6c757d;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevron-icon.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+.employee-selector-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.employee-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  text-align: left;
+}
+
+.employee-option:last-child {
+  border-bottom: none;
+}
+
+.employee-option:hover {
+  background-color: #f8f9fa;
+}
+
+.employee-option.selected {
+  background-color: #e7f3ff;
+}
+
+.employee-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.employee-option-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.938rem;
+}
+
+.employee-option-email {
+  font-size: 0.813rem;
+  color: #6c757d;
+}
+
+.check-icon {
+  width: 18px;
+  height: 18px;
+  color: #007bff;
+  flex-shrink: 0;
+}
+
+.employee-selector-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #6c757d;
+}
+
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin-small 0.8s linear infinite;
+}
+
+@keyframes spin-small {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .employee-selector-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .employee-selector-dropdown {
+    min-width: unset;
+  }
+}
+

@@ -212,3 +212,94 @@ export interface ApplicationFormDto {
   status?: string;
 }
 
+// ========================================
+// Types pour Leave Management
+// ========================================
+
+export interface LeaveTypeDto {
+  id: number;
+  name: string;
+  description: string;
+  isPaid: boolean;
+  maxDaysPerYear?: number;
+  requiresApproval: boolean;
+  advanceNoticeDays?: number;
+  isActive: boolean;
+  color?: string;
+}
+
+export interface LeaveRequestDto {
+  id: number;
+  employeeId: number;
+  employeeName: string;
+  leaveTypeId: number;
+  leaveTypeName: string;
+  leaveTypeColor?: string;
+  startDate: string; // Format: YYYY-MM-DD
+  endDate: string; // Format: YYYY-MM-DD
+  daysRequested: number;
+  reason?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  approvedById?: number;
+  approvedByName?: string;
+  approvedDate?: string;
+  approvalComment?: string;
+  isHalfDayStart: boolean;
+  isHalfDayEnd: boolean;
+  emergencyContact?: string;
+}
+
+export interface LeaveRequestFormDto {
+  id?: number;
+  leaveTypeId: number;
+  startDate: string;
+  endDate: string;
+  reason?: string;
+  isHalfDayStart: boolean;
+  isHalfDayEnd: boolean;
+  emergencyContact?: string;
+}
+
+export interface LeaveBalanceDto {
+  id: number;
+  employeeId: number;
+  employeeName: string;
+  leaveTypeId: number;
+  leaveTypeName: string;
+  year: number;
+  allocatedDays: number;
+  usedDays: number;
+  pendingDays: number;
+  carriedOverDays: number;
+  remainingDays: number;
+  expiresOn?: string;
+}
+
+export interface LeaveApprovalDto {
+  id: number;
+  status: 'APPROVED' | 'REJECTED';
+  approvalComment?: string;
+}
+
+export interface EmployeeLeaveOverviewDto {
+  employeeId: number;
+  employeeName: string;
+  currentYear: number;
+  leaveBalances: LeaveBalanceDto[];
+  recentRequests: LeaveRequestDto[];
+  upcomingLeaves: LeaveRequestDto[];
+}
+
+export interface LeaveNotificationDto {
+  id: number;
+  leaveRequestId: number;
+  leaveRequestEmployee: string;
+  leaveTypeName: string;
+  recipientId: number;
+  recipientName: string;
+  notificationType: 'REQUEST_SUBMITTED' | 'REQUEST_APPROVED' | 'REQUEST_REJECTED' | 'REQUEST_CANCELLED' | 'BALANCE_LOW' | 'EXPIRING_LEAVE' | 'OVERLAPPING_LEAVE';
+  message: string;
+  isRead: boolean;
+  readAt?: string;
+  sentAt: string;
+}

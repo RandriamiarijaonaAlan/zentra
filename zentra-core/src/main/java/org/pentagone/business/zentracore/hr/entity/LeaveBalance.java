@@ -5,36 +5,43 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.pentagone.business.zentracore.common.entity.BaseEntity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
-@Table(name = "leave_balance")
+@Table(name = "leave_balance",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"employee_id", "leave_type_id", "year"}))
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class LeaveBalance extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leave_type_id", nullable = false)
+    private LeaveType leaveType;
 
     @Column(name = "year", nullable = false)
     private Integer year;
 
-    @Column(name = "annual_total")
-    private Double annualTotal = 25.0;
+    @Column(name = "allocated_days", nullable = false, precision = 5, scale = 2)
+    private BigDecimal allocatedDays;
 
-    @Column(name = "annual_taken")
-    private Double annualTaken = 0.0;
+    @Column(name = "used_days", nullable = false, precision = 5, scale = 2)
+    private BigDecimal usedDays = BigDecimal.ZERO;
 
-    @Column(name = "sick_total")
-    private Double sickTotal = 0.0;
+    @Column(name = "pending_days", nullable = false, precision = 5, scale = 2)
+    private BigDecimal pendingDays = BigDecimal.ZERO;
 
-    @Column(name = "sick_taken")
-    private Double sickTaken = 0.0;
+    @Column(name = "carried_over_days", precision = 5, scale = 2)
+    private BigDecimal carriedOverDays = BigDecimal.ZERO;
 
-    @Column(name = "exceptional_total")
-    private Double exceptionalTotal = 0.0;
+    @Column(name = "expires_on")
+    private LocalDate expiresOn;
 
-    @Column(name = "exceptional_taken")
-    private Double exceptionalTaken = 0.0;
-
+    public BigDecimal getRemainingDays() {
+        return allocatedDays.add(carriedOverDays).subtract(usedDays).subtract(pendingDays);
+    }
 }
-

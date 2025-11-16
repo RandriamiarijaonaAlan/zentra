@@ -19,6 +19,13 @@ import ApplicationForm from './pages/ApplicationForm';
 import { StaffingNeedApp } from './hr/StaffingNeedApp';
 import PublicationsPage from './pages/PublicationsPage';
 import PublicationForm from './pages/PublicationForm';
+import { LeaveTypeList } from './pages/LeaveTypeList';
+import { LeaveTypeForm } from './pages/LeaveTypeForm';
+import { LeaveRequestList } from './pages/LeaveRequestList';
+import LeaveRequestForm from './pages/LeaveRequestForm';
+import LeaveCalendar from './pages/LeaveCalendar';
+import LeaveDashboard from './pages/LeaveDashboard';
+import LeaveApproval from './pages/LeaveApproval';
 
 function App() {
   return (
@@ -62,6 +69,19 @@ function App() {
 
           {/* Besoins */}
           <Route path="besoins" element={<StaffingNeedApp />} />
+
+          {/* Leave Management */}
+          <Route path="leaves/dashboard" element={<LeaveDashboard />} />
+          <Route path="leaves/types" element={<LeaveTypeList />} />
+          <Route path="leaves/types/new" element={<LeaveTypeForm />} />
+          <Route path="leaves/types/:id/edit" element={<LeaveTypeForm />} />
+          <Route path="leaves/requests" element={<LeaveRequestList showEmployeeColumn={true} />} />
+          <Route path="leaves/requests/new" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/:id" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/:id/edit" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/pending" element={<LeaveRequestList showEmployeeColumn={true} />} />
+          <Route path="leaves/requests/:requestId/approve" element={<LeaveApproval />} />
+          <Route path="leaves/calendar" element={<LeaveCalendar />} />
         </Route>
       </Routes>
     </BrowserRouter>

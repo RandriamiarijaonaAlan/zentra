@@ -1,0 +1,47 @@
+# Test des endpoints Employee et Leave Management
+# Avant de lancer ces tests, assurez-vous que le serveur est démarré
+
+### 0. Test de santé générale de l'API
+GET http://localhost:8080/health
+Accept: application/json
+
+### 0b. Test de santé du module congés
+GET http://localhost:8080/health/leave-management
+Accept: application/json
+
+### 1. Test de base - Récupérer tous les employés
+GET http://localhost:8080/employees
+Accept: application/json
+
+### 2. Test de santé du contrôleur Leave Balance
+GET http://localhost:8080/leave-balances/health
+Accept: application/json
+
+### 3. Test simple de l'overview (avec gestion d'erreurs)
+GET http://localhost:8080/leave-balances/employee/1/overview-simple
+Accept: application/json
+
+### 4. Initialiser les balances si nécessaire
+POST http://localhost:8080/leave-balances/employee/1/initialize?year=2025
+Accept: application/json
+
+### 5. Test de l'overview complet
+GET http://localhost:8080/leave-balances/employee/1/overview
+Accept: application/json
+
+### 6. Test des types de congés (pour vérifier les données de base)
+GET http://localhost:8080/leave-types
+Accept: application/json
+
+### 7. Test des balances d'un employé pour une année
+GET http://localhost:8080/leave-balances/employee/1?year=2025
+Accept: application/json
+
+### 8. Test des demandes de congés d'un employé
+GET http://localhost:8080/leave-requests/employee/1
+Accept: application/json
+
+### 9. Test du calendrier des congés
+GET http://localhost:8080/leave-requests/employee/1/calendar/2025/12
+Accept: application/json
+
