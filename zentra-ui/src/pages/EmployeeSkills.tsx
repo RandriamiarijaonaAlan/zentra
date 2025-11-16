@@ -11,6 +11,13 @@ export default function EmployeeSkills() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const stats = {
+    count: items.length,
+    experienceTotal: items.reduce((s,e)=> s + (e.yearsExperience||0),0),
+    gaps: items.filter(e=> e.targetLevel && (e.level||0) < e.targetLevel).length,
+    avgLevel: items.length>0? (items.reduce((s,e)=> s + (e.level||0),0)/items.length).toFixed(1):'0'
+  };
+
   useEffect(() => {
     // Preload skill catalog for name/category display
     (async () => {
@@ -72,28 +79,51 @@ export default function EmployeeSkills() {
         <p>No skills found for this employee.</p>
       )}
 
+      {items.length>0 && (
+        <div style={{
+          display:'grid',
+          gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',
+          gap:'.75rem',
+          background:'#f8f9fa',
+          padding:'0.75rem',
+          borderRadius:'8px',
+          border:'1px solid #e0e0e0',
+          marginBottom:'1.25rem'
+        }}>
+          <Stat label="Skills" value={stats.count} color="#1976d2" />
+          <Stat label="Avg Level" value={stats.avgLevel} color="#2e7d32" />
+            <Stat label="Gaps" value={stats.gaps} color="#ed6c02" />
+            <Stat label="Experience" value={stats.experienceTotal} color="#6a1b9a" />
+        </div>
+      )}
+
       {items.length > 0 && (
-        <div className="qcm-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+        <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap:'1.25rem' }}>
           {items.map(es => {
             const skill = es.skillId != null ? skillsIndex[es.skillId] : undefined;
+            const gap = es.targetLevel && (es.level||0) < es.targetLevel;
             return (
-              <div key={es.id} className="qcm-card">
-                <div className="qcm-card-header">
-                  <h3>{skill?.name || `Skill #${es.skillId}`}</h3>
-                </div>
-                {skill?.category && (
-                  <div style={{ marginBottom: '0.5rem' }}>
-                    <span className="badge" style={{ background: '#e3f2fd', color: '#1976d2' }}>{skill.category}</span>
+              <div key={es.id} style={{
+                background:'white',
+                border:'1px solid #e5e7eb',
+                borderRadius:'12px',
+                padding:'1rem',
+                display:'flex',
+                flexDirection:'column',
+                gap:'.5rem'
+              }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'.5rem' }}>
+                  <div>
+                    <h3 style={{ margin:0, fontSize:'0.9rem' }}>{skill?.name || `Skill #${es.skillId}`}</h3>
+                    {skill?.category && <span style={{ background:'#dbeafe', color:'#1e40af', padding:'0.25rem 0.6rem', borderRadius:'6px', fontSize:'0.55rem', fontWeight:600 }}>{skill.category}</span>}
                   </div>
-                )}
-                <div style={{ display: 'grid', gap: '0.5rem' }}>
-                  <div><strong>Level:</strong> {levelLabel(es.level)} ({es.level})</div>
-                  {es.targetLevel && <div><strong>Target:</strong> {levelLabel(es.targetLevel)} ({es.targetLevel})</div>}
-                  {es.yearsExperience != null && <div><strong>Experience:</strong> {es.yearsExperience} years</div>}
-                  {es.lastEvaluationDate && (
-                    <div><strong>Last evaluation:</strong> {new Date(es.lastEvaluationDate).toLocaleDateString()}</div>
-                  )}
+                  <span style={{ background:'#f1f5f9', color:'#334155', padding:'0.25rem 0.5rem', borderRadius:'6px', fontSize:'0.55rem' }}>L{es.level||0}</span>
                 </div>
+                <div style={{ fontSize:'0.65rem', color:'#444' }}>
+                  <strong>Level:</strong> {levelLabel(es.level)} {gap && <span style={{ color:'#e65100' }}> → Target L{es.targetLevel}</span>}
+                </div>
+                {es.yearsExperience != null && <div style={{ fontSize:'0.6rem', color:'#555' }}><strong>Experience:</strong> {es.yearsExperience} yrs</div>}
+                {es.lastEvaluationDate && <div style={{ fontSize:'0.6rem', color:'#666' }}><strong>Last eval:</strong> {new Date(es.lastEvaluationDate).toLocaleDateString()}</div>}
               </div>
             );
           })}
@@ -103,3 +133,11 @@ export default function EmployeeSkills() {
   );
 }
 
+function Stat({label,value,color}:{label:string;value:string|number;color:string}) {
+  return (
+    <div style={{ background:'white', border:'1px solid #e0e0e0', borderRadius:'8px', padding:'.6rem', textAlign:'center' }}>
+      <div style={{ fontSize:'1.1rem', fontWeight:700, color }}>{value}</div>
+      <div style={{ fontSize:'.55rem', letterSpacing:'.5px', textTransform:'uppercase', color:'#555', fontWeight:600 }}>{label}</div>
+    </div>
+  );
+}

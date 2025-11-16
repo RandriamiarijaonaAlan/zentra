@@ -84,6 +84,14 @@ export default function TrainingForm() {
     }));
   };
 
+  const preview = {
+    title: formData.title || 'Untitled Training',
+    max: formData.maxLevelReached,
+    description: formData.description?.slice(0,120) || 'No description yet.',
+    count: formData.targetSkillIds.length,
+    skills: skills.filter(s => formData.targetSkillIds.includes(s.id)).map(s=> s.name).slice(0,5)
+  };
+
   if (loading) {
     return (
       <div className="admin-page">
@@ -103,7 +111,6 @@ export default function TrainingForm() {
           <p className="page-subtitle">Define a training program for skill development</p>
         </div>
       </div>
-
       {error && (
         <div className="alert alert-error">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -114,124 +121,134 @@ export default function TrainingForm() {
           {error}
         </div>
       )}
+      <div style={{ display:'grid', gap:'1.25rem', gridTemplateColumns:'minmax(0,1fr) 340px' }}>
+        <form onSubmit={handleSubmit} className="qcm-form" style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <div className="form-section">
+            <h2>Training Information</h2>
+            <div className="form-grid">
+              <div className="form-group full-width">
+                <label htmlFor="title">
+                  Training Title <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="e.g., Advanced JavaScript Workshop, Leadership Bootcamp"
+                  required
+                  ref={titleRef}
+                />
+              </div>
 
-      <form onSubmit={handleSubmit} className="qcm-form">
-        <div className="form-section">
-          <h2>Training Information</h2>
-          <div className="form-grid">
-            <div className="form-group full-width">
-              <label htmlFor="title">
-                Training Title <span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g., Advanced JavaScript Workshop, Leadership Bootcamp"
-                required
-                ref={titleRef}
-              />
-            </div>
+              <div className="form-group full-width">
+                <label htmlFor="maxLevelReached">
+                  Maximum Level Reached <span className="required">*</span>
+                </label>
+                <select
+                  id="maxLevelReached"
+                  name="maxLevelReached"
+                  value={formData.maxLevelReached}
+                  onChange={(e) => setFormData({ ...formData, maxLevelReached: parseInt(e.target.value) })}
+                  required
+                >
+                  <option value="1">Level 1 - Beginner</option>
+                  <option value="2">Level 2 - Intermediate</option>
+                  <option value="3">Level 3 - Advanced</option>
+                  <option value="4">Level 4 - Expert</option>
+                </select>
+                <small style={{ color: '#666', marginTop: '0.5rem', display: 'block' }}>
+                  The highest skill level this training can help achieve
+                </small>
+              </div>
 
-            <div className="form-group full-width">
-              <label htmlFor="maxLevelReached">
-                Maximum Level Reached <span className="required">*</span>
-              </label>
-              <select
-                id="maxLevelReached"
-                name="maxLevelReached"
-                value={formData.maxLevelReached}
-                onChange={(e) => setFormData({ ...formData, maxLevelReached: parseInt(e.target.value) })}
-                required
-              >
-                <option value="1">Level 1 - Beginner</option>
-                <option value="2">Level 2 - Intermediate</option>
-                <option value="3">Level 3 - Advanced</option>
-                <option value="4">Level 4 - Expert</option>
-              </select>
-              <small style={{ color: '#666', marginTop: '0.5rem', display: 'block' }}>
-                The highest skill level this training can help achieve
-              </small>
-            </div>
-
-            <div className="form-group full-width">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description || ''}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe the training program, duration, objectives..."
-                rows={5}
-              />
+              <div className="form-group full-width">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description || ''}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the training program, duration, objectives..."
+                  rows={5}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="form-section">
-          <h2>
-            Target Skills <span className="required">*</span>
-          </h2>
-          <p style={{ color: '#666', marginBottom: '1rem' }}>
-            Select the skills that this training helps develop
-          </p>
+          <div className="form-section">
+            <h2>
+              Target Skills <span className="required">*</span>
+            </h2>
+            <p style={{ color: '#666', marginBottom: '1rem' }}>
+              Select the skills that this training helps develop
+            </p>
 
-          {skills.length === 0 ? (
-            <div className="alert alert-info">
-              No skills available. Please create skills first.
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
-              {skills.map(skill => (
-                <label
-                  key={skill.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '1rem',
-                    border: formData.targetSkillIds.includes(skill.id) ? '2px solid #1976d2' : '1px solid #e0e0e0',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: formData.targetSkillIds.includes(skill.id) ? '#e3f2fd' : 'white',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.targetSkillIds.includes(skill.id)}
-                    onChange={() => toggleSkill(skill.id)}
-                    style={{ marginRight: '0.75rem' }}
-                  />
-                  <div>
-                    <div style={{ fontWeight: 600 }}>{skill.name}</div>
-                    {skill.category && (
-                      <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
-                        {skill.category}
-                      </div>
-                    )}
-                  </div>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+            {skills.length === 0 ? (
+              <div className="alert alert-info">
+                No skills available. Please create skills first.
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+                {skills.map(skill => (
+                  <label
+                    key={skill.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '1rem',
+                      border: formData.targetSkillIds.includes(skill.id) ? '2px solid #1976d2' : '1px solid #e0e0e0',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      backgroundColor: formData.targetSkillIds.includes(skill.id) ? '#e3f2fd' : 'white',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.targetSkillIds.includes(skill.id)}
+                      onChange={() => toggleSkill(skill.id)}
+                      style={{ marginRight: '0.75rem' }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{skill.name}</div>
+                      {skill.category && (
+                        <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
+                          {skill.category}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="form-actions">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/trainings')}
-            className="btn-secondary"
-            disabled={submitting}
-          >
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary" disabled={submitting}>
-            {submitting ? 'Saving...' : isEdit ? 'Update Training' : 'Create Training'}
-          </button>
+          <div className="form-actions">
+            <button
+              type="button"
+              onClick={() => navigate('/admin/trainings')}
+              className="btn-secondary"
+              disabled={submitting}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary" disabled={submitting}>
+              {submitting ? 'Saving...' : isEdit ? 'Update Training' : 'Create Training'}
+            </button>
+          </div>
+        </form>
+        <div style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <h2 style={{ marginTop:0 }}>Preview</h2>
+          <div style={{ fontSize:'0.75rem', lineHeight:1.5 }}>
+            <strong>{preview.title}</strong>
+            <div style={{ marginTop:'.25rem', color:'#555' }}>Max Level: {preview.max}</div>
+            <div style={{ marginTop:'.5rem', color:'#666' }}>{preview.description}</div>
+            <div style={{ marginTop:'.5rem', color:'#444' }}>Target Skills ({preview.count}): {preview.count? preview.skills.join(', ') : 'None selected'}</div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

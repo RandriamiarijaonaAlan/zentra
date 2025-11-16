@@ -62,6 +62,12 @@ export default function SkillForm() {
     }
   };
 
+  const preview = {
+    name: formData.name || 'Untitled Skill',
+    category: formData.category || '—',
+    desc: formData.description?.slice(0,120) || 'No description yet.'
+  };
+
   if (loading) {
     return (
       <div className="admin-page">
@@ -93,70 +99,80 @@ export default function SkillForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="qcm-form">
-        <div className="form-section">
-          <h2>Skill Information</h2>
-          <div className="form-grid">
-            <div className="form-group full-width">
-              <label htmlFor="name">
-                Skill Name <span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g., JavaScript, Project Management, Communication"
-                required
-              />
-            </div>
+      <div style={{ display:'grid', gap:'1.25rem', gridTemplateColumns:'minmax(0,1fr) 340px' }}>
+        <form onSubmit={handleSubmit} className="qcm-form" style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <div className="form-section">
+            <h2 style={{ marginTop:0 }}>Skill Information</h2>
+            <div className="form-grid">
+              <div className="form-group full-width">
+                <label htmlFor="name">
+                  Skill Name <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g., JavaScript, Project Management, Communication"
+                  required
+                />
+              </div>
 
-            <div className="form-group full-width">
-              <label htmlFor="category">Category</label>
-              <select
-                id="category"
-                name="category"
-                value={formData.category || ''}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              >
-                <option value="">Select a category</option>
-                <option value="TECHNICAL">Technical</option>
-                <option value="BEHAVIORAL">Behavioral</option>
-                <option value="BUSINESS">Business</option>
-                <option value="MANAGEMENT">Management</option>
-                <option value="LANGUAGE">Language</option>
-              </select>
-            </div>
+              <div className="form-group full-width">
+                <label htmlFor="category">Category</label>
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category || ''}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="">Select a category</option>
+                  <option value="TECHNICAL">Technical</option>
+                  <option value="BEHAVIORAL">Behavioral</option>
+                  <option value="BUSINESS">Business</option>
+                  <option value="MANAGEMENT">Management</option>
+                  <option value="LANGUAGE">Language</option>
+                </select>
+              </div>
 
-            <div className="form-group full-width">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description || ''}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe the skill and its requirements..."
-                rows={5}
-              />
+              <div className="form-group full-width">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description || ''}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the skill and its requirements..."
+                  rows={5}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="form-actions">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/skills')}
-            className="btn-secondary"
-            disabled={submitting}
-          >
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary" disabled={submitting}>
-            {submitting ? 'Saving...' : isEdit ? 'Update Skill' : 'Create Skill'}
-          </button>
+          <div className="form-actions">
+            <button
+              type="button"
+              onClick={() => navigate('/admin/skills')}
+              className="btn-secondary"
+              disabled={submitting}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary" disabled={submitting}>
+              {submitting ? 'Saving...' : isEdit ? 'Update Skill' : 'Create Skill'}
+            </button>
+          </div>
+        </form>
+        <div style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <h2 style={{ marginTop:0 }}>Preview</h2>
+          <div style={{ fontSize:'0.75rem', lineHeight:1.5 }}>
+            <strong>{preview.name}</strong>
+            <div style={{ marginTop:'.25rem', color:'#555' }}>Category: {preview.category}</div>
+            <div style={{ marginTop:'.5rem', color:'#666' }}>{preview.desc}</div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

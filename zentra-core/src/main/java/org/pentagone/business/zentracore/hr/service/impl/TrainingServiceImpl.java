@@ -12,13 +12,25 @@ import org.pentagone.business.zentracore.hr.service.TrainingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @Transactional
 public class TrainingServiceImpl implements TrainingService {
+
+    private static class Score {
+        final Training t;
+        final int strong;
+        final int partial;
+        Score(Training t, int strong, int partial) {
+            this.t = t;
+            this.strong = strong;
+            this.partial = partial;
+        }
+    }
 
     private final TrainingRepository trainingRepository;
     private final SkillRepository skillRepository;
@@ -103,24 +115,48 @@ public class TrainingServiceImpl implements TrainingService {
         List<EmployeeSkill> employeeSkills = employeeSkillRepository.findByEmployeeId(employeeId);
         if (employeeSkills.isEmpty()) return List.of();
 
-        // Collect skills needing improvement (targetLevel > level)
-        Set<Long> neededSkillIds = employeeSkills.stream()
-                .filter(es -> es.getTargetLevel() != null && es.getTargetLevel() > (es.getLevel() == null ? 0 : es.getLevel()))
-                .map(es -> es.getSkill().getId())
-                .collect(Collectors.toSet());
+        // Build maps for current and target levels per skill
+        Map<Long, Integer> currentLevel = new HashMap<>();
+        Map<Long, Integer> targetLevel = new HashMap<>();
+        for (EmployeeSkill es : employeeSkills) {
+            Long sid = es.getSkill().getId();
+            currentLevel.put(sid, es.getLevel() == null ? 0 : es.getLevel());
+            if (es.getTargetLevel() != null && es.getTargetLevel() > (es.getLevel() == null ? 0 : es.getLevel())) {
+                targetLevel.put(sid, es.getTargetLevel());
+            }
+        }
 
-        if (neededSkillIds.isEmpty()) return List.of();
+        if (targetLevel.isEmpty()) return List.of();
 
-        // Fetch trainings targeting these skills
-        List<Training> trainings = trainingRepository.findByTargetSkillsIdIn(neededSkillIds.stream().toList());
+        // Fetch trainings targeting at least one gap skill
+        List<Long> gapSkillIds = targetLevel.keySet().stream().toList();
+        List<Training> trainings = trainingRepository.findByTargetSkillsIdIn(gapSkillIds);
 
-        // Filter trainings whose maxLevelReached satisfies at least one needed target gap
-        List<Training> filtered = trainings.stream().filter(t -> {
-            if (t.getTargetSkills() == null) return false;
-            return t.getTargetSkills().stream().anyMatch(ts -> neededSkillIds.contains(ts.getId()));
-        }).toList();
+        // Score trainings: strong = can reach target; partial = improves but doesn't reach target
+        List<Score> scored = trainings.stream()
+                .map(t -> {
+                    if (t.getTargetSkills() == null || t.getTargetSkills().isEmpty()) return new Score(t, 0, 0);
+                    int strong = 0;
+                    int partial = 0;
+                    for (Skill s : t.getTargetSkills()) {
+                        Long sid = s.getId();
+                        if (!targetLevel.containsKey(sid)) continue; // not a gap skill
+                        int cur = currentLevel.getOrDefault(sid, 0);
+                        int tgt = targetLevel.get(sid);
+                        int max = t.getMaxLevelReached() == null ? 0 : t.getMaxLevelReached();
+                        if (max >= tgt) strong++;
+                        else if (max > cur) partial++;
+                    }
+                    return new Score(t, strong, partial);
+                })
+                .filter(s -> s.strong > 0 || s.partial > 0)
+                .sorted(Comparator
+                        .comparingInt((Score s) -> s.strong).reversed()
+                        .thenComparingInt(s -> s.partial).reversed()
+                        .thenComparingInt(s -> s.t.getMaxLevelReached() == null ? 0 : s.t.getMaxLevelReached()).reversed()
+                        .thenComparing(s -> s.t.getTitle(), String.CASE_INSENSITIVE_ORDER))
+                .toList();
 
-        return filtered.stream().map(this::toDto).toList();
+        return scored.stream().map(s -> toDto(s.t)).toList();
     }
 }
-

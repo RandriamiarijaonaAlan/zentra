@@ -73,126 +73,98 @@ export default function TrainingDetails() {
   }
 
   const targetSkills = getTargetSkills();
+  const stats = {
+    skillCount: targetSkills.length,
+    maxLevel: training.maxLevelReached,
+  };
 
   return (
     <div className="admin-page">
       <div className="page-header">
         <div>
           <div className="breadcrumb">
-            <Link to="/admin/trainings">Trainings</Link>
-            <span>/</span>
-            <span>{training.title}</span>
+            <Link to="/admin/trainings">Trainings</Link><span>/</span><span>{training.title}</span>
           </div>
-          <h1>{training.title}</h1>
-          <span className="badge" style={{
-            background: getLevelColor(training.maxLevelReached),
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '16px',
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            marginTop: '0.5rem',
-            display: 'inline-block'
-          }}>
-            Max Level: {getLevelLabel(training.maxLevelReached)}
-          </span>
+          <h1 style={{ marginBottom: '.75rem' }}>{training.title}</h1>
+          <span style={{
+            background:getLevelColor(training.maxLevelReached),
+            color:'white',
+            padding:'0.35rem 0.8rem',
+            borderRadius:'6px',
+            fontSize:'0.7rem',
+            fontWeight:600
+          }}>Max: {getLevelLabel(training.maxLevelReached)} (L{training.maxLevelReached})</span>
         </div>
-        <button onClick={() => navigate(`/admin/trainings/${id}/edit`)} className="btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Edit Training
-        </button>
+        <div style={{ display:'flex', gap:'.5rem' }}>
+          <button onClick={() => navigate(`/admin/trainings/${id}/edit`)} className="btn-primary">Edit</button>
+          <Link to="/admin/trainings" className="btn-secondary">Back</Link>
+        </div>
       </div>
 
-      <div className="details-grid">
-        <div className="details-card">
-          <h2>Description</h2>
-          <p>{training.description || 'No description provided'}</p>
+      {/* Stats Panel */}
+      <div style={{
+        display:'grid',
+        gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',
+        gap:'.75rem',
+        background:'#f8f9fa',
+        padding:'0.75rem',
+        borderRadius:'8px',
+        border:'1px solid #e0e0e0',
+        marginBottom:'1.25rem'
+      }}>
+        <Stat label="Target Skills" value={stats.skillCount} color="#1976d2" />
+        <Stat label="Max Level" value={stats.maxLevel} color="#ed6c02" />
+        <Stat label="Description" value={training.description? (training.description.length>30? training.description.slice(0,30)+'…':'OK'): 'None'} color="#6a1b9a" />
+      </div>
+
+      <div style={{ display:'grid', gap:'1.25rem' }}>
+        <div style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <h2 style={{ marginTop:0 }}>Description</h2>
+          <p style={{ fontSize:'0.8rem', lineHeight:1.5 }}>{training.description || 'No description provided.'}</p>
         </div>
 
-        <div className="details-card">
-          <h2>Target Skills ({targetSkills.length})</h2>
+        <div style={{ background:'white', border:'1px solid #e5e7eb', borderRadius:'12px', padding:'1.25rem' }}>
+          <h2 style={{ marginTop:0 }}>Target Skills ({targetSkills.length})</h2>
           {targetSkills.length === 0 ? (
-            <p className="empty-message">No target skills defined</p>
+            <p style={{ fontSize:'0.75rem', color:'#666' }}>No target skills defined.</p>
           ) : (
-            <div style={{ display: 'grid', gap: '0.75rem' }}>
-              {targetSkills.map((skill) => (
-                <div
-                  key={skill.id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '1rem',
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '8px',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => navigate(`/admin/skills/${skill.id}`)}
-                >
+            <div style={{ display:'grid', gap:'.75rem', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))' }}>
+              {targetSkills.map(s => (
+                <button key={s.id} onClick={()=> navigate(`/admin/skills/${s.id}`)} style={{
+                  textAlign:'left',
+                  border:'1px solid #e0e0e0',
+                  background:'white',
+                  borderRadius:'8px',
+                  padding:'.75rem',
+                  cursor:'pointer',
+                  display:'flex',
+                  justifyContent:'space-between',
+                  alignItems:'center'
+                }}>
                   <div>
-                    <strong>{skill.name}</strong>
-                    {skill.category && (
-                      <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
-                        {skill.category}
-                      </div>
-                    )}
+                    <strong style={{ fontSize:'0.75rem'}}>{s.name}</strong>
+                    {s.category && <div style={{ fontSize:'0.6rem', color:'#666', marginTop:'.25rem' }}>{s.category}</div>}
                   </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '20px', height: '20px', color: '#999' }}>
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '16px', height:'16px', color:'#999' }}><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
               ))}
             </div>
           )}
         </div>
-
-        <div className="details-card">
-          <h2>Training Information</h2>
-          <div style={{ display: 'grid', gap: '1rem' }}>
-            <div>
-              <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.25rem' }}>
-                Maximum Level Reached
-              </div>
-              <div style={{
-                display: 'inline-block',
-                padding: '0.5rem 1rem',
-                borderRadius: '8px',
-                backgroundColor: getLevelColor(training.maxLevelReached),
-                color: 'white',
-                fontWeight: 600
-              }}>
-                Level {training.maxLevelReached} - {getLevelLabel(training.maxLevelReached)}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.25rem' }}>
-                Number of Target Skills
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>
-                {targetSkills.length}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div className="details-actions">
-        <button onClick={() => navigate('/admin/trainings')} className="btn-secondary">
-          Back to Trainings
-        </button>
-        <Link to="/admin/trainings/suggestions" className="btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-          </svg>
-          View Suggestions
-        </Link>
+      <div style={{ marginTop:'1.5rem', display:'flex', gap:'.75rem' }}>
+        <Link to="/admin/trainings/suggestions" className="btn-primary">View Suggestions</Link>
       </div>
     </div>
   );
 }
 
+function Stat({label,value,color}:{label:string;value:string|number;color:string}) {
+  return (
+    <div style={{ background:'white', border:'1px solid #e0e0e0', borderRadius:'8px', padding:'.6rem', textAlign:'center' }}>
+      <div style={{ fontSize:'1.1rem', fontWeight:700, color }}>{value}</div>
+      <div style={{ fontSize:'.55rem', letterSpacing:'.5px', textTransform:'uppercase', color:'#555', fontWeight:600 }}>{label}</div>
+    </div>
+  );
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { get } from '../services/api';
-import type { SkillDto, EmployeeSkillDto } from '../types';
+import type { SkillDto, EmployeeSkillDto, EmployeeDto } from '../types';
 import '../styles/QcmDetails.css';
 
 export default function SkillDetails() {
@@ -9,6 +9,7 @@ export default function SkillDetails() {
   const navigate = useNavigate();
   const [skill, setSkill] = useState<SkillDto | null>(null);
   const [employees, setEmployees] = useState<EmployeeSkillDto[]>([]);
+  const [employeesDirectory, setEmployeesDirectory] = useState<Record<number, EmployeeDto>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,12 +21,18 @@ export default function SkillDetails() {
 
   const loadSkillDetails = async (skillId: string) => {
     try {
-      const [skillData, employeeData] = await Promise.all([
+      const [skillData, employeeData, directory] = await Promise.all([
         get<SkillDto>(`/skills/${skillId}`),
-        get<EmployeeSkillDto[]>(`/employee-skills/by-skill/${skillId}`)
+        get<EmployeeSkillDto[]>(`/employee-skills/by-skill/${skillId}`),
+        get<EmployeeDto[]>('/employees').catch(() => [])
       ]);
       setSkill(skillData);
       setEmployees(employeeData);
+      if (Array.isArray(directory)) {
+        const map: Record<number, EmployeeDto> = {} as any;
+        (directory as EmployeeDto[]).forEach(e => { if (e && typeof e.id === 'number') map[e.id] = e; });
+        setEmployeesDirectory(map);
+      }
       setLoading(false);
     } catch (err: any) {
       setError('Cannot load skill details');
@@ -42,6 +49,9 @@ export default function SkillDetails() {
     const colors = ['', '#ef5350', '#ffa726', '#66bb6a', '#42a5f5'];
     return colors[level] || '#999';
   };
+
+  const avgLevel = employees.length > 0 ? (employees.reduce((s,e)=> s + (e.level||0),0)/employees.length).toFixed(1) : '0';
+  const levelGroups = employees.reduce((acc, e) => { const l = e.level||0; acc[l] = (acc[l]||0)+1; return acc;}, {} as Record<number,number>);
 
   if (loading) {
     return (
@@ -74,43 +84,79 @@ export default function SkillDetails() {
             <span>/</span>
             <span>{skill.name}</span>
           </div>
-          <h1>{skill.name}</h1>
+          <h1 style={{ marginBottom: '.75rem' }}>{skill.name}</h1>
           {skill.category && (
-            <span className="badge" style={{
-              background: '#e3f2fd',
-              color: '#1976d2',
-              padding: '0.5rem 1rem',
-              borderRadius: '16px',
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              marginTop: '0.5rem',
-              display: 'inline-block'
-            }}>
-              {skill.category}
-            </span>
+            <span style={{
+              background: '#dbeafe',
+              color: '#1e40af',
+              padding: '0.35rem 0.8rem',
+              borderRadius: '6px',
+              fontSize: '0.7rem',
+              fontWeight: 600
+            }}>{skill.category}</span>
           )}
         </div>
-        <button onClick={() => navigate(`/admin/skills/${id}/edit`)} className="btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Edit Skill
-        </button>
+        <button onClick={() => navigate(`/admin/skills/${id}/edit`)} className="btn-primary">Edit Skill</button>
       </div>
 
-      <div className="details-grid">
-        <div className="details-card">
-          <h2>Description</h2>
-          <p>{skill.description || 'No description provided'}</p>
+      {/* Stats Panel */}
+      {employees.length > 0 && (
+        <div style={{
+          display:'grid',
+          gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',
+          gap:'.75rem',
+          background:'#f8f9fa',
+          padding:'0.75rem',
+          borderRadius:'8px',
+          border:'1px solid #e0e0e0',
+          marginBottom:'1.25rem'
+        }}>
+          <Stat label="Employees" value={employees.length} color="#1976d2" />
+          <Stat label="Avg Level" value={avgLevel} color="#2e7d32" />
+          <Stat label="With Target" value={employees.filter(e=> e.targetLevel && e.targetLevel> (e.level||0)).length} color="#ed6c02" />
+          <Stat label="Experience Yrs" value={employees.reduce((s,e)=> s + (e.yearsExperience||0),0)} color="#6a1b9a" />
+        </div>
+      )}
+
+      <div style={{ display:'grid', gap:'1.25rem' }}>
+        <div style={{
+          background:'white',
+          border:'1px solid #e5e7eb',
+          borderRadius:'12px',
+          padding:'1.25rem'
+        }}>
+          <h2 style={{ marginTop:0 }}>Description</h2>
+          <p style={{ fontSize:'0.8rem', lineHeight:1.5 }}>{skill.description || 'No description provided.'}</p>
+          {employees.length>0 && (
+            <div style={{ marginTop:'1.25rem' }}>
+              <h3 style={{ fontSize:'0.9rem', margin:'0 0 .5rem' }}>Level Distribution</h3>
+              <div style={{ display:'flex', gap:'.5rem', flexWrap:'wrap' }}>
+                {[1,2,3,4].map(l => (
+                  <div key={l} style={{
+                    background: levelGroups[l]? getLevelColor(l): '#f3f4f6',
+                    color: levelGroups[l]? 'white':'#6b7280',
+                    padding:'0.45rem 0.65rem',
+                    borderRadius:'6px',
+                    fontSize:'0.65rem',
+                    fontWeight:600
+                  }}>L{l}: {levelGroups[l]||0}</div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="details-card">
-          <h2>Employees with this skill ({employees.length})</h2>
+        <div style={{
+          background:'white',
+          border:'1px solid #e5e7eb',
+          borderRadius:'12px',
+          padding:'1.25rem'
+        }}>
+          <h2 style={{ marginTop:0 }}>Employees ({employees.length})</h2>
           {employees.length === 0 ? (
-            <p className="empty-message">No employees have this skill yet</p>
+            <p style={{ fontSize:'0.75rem', color:'#666' }}>No employees have this skill yet.</p>
           ) : (
-            <div className="employee-list">
+            <div style={{ display:'grid', gap:'.75rem' }}>
               {employees.map((emp) => (
                 <div key={emp.id} className="employee-item" style={{
                   display: 'flex',
@@ -122,7 +168,16 @@ export default function SkillDetails() {
                   marginBottom: '0.75rem'
                 }}>
                   <div>
-                    <strong>Employee ID: {emp.employeeId}</strong>
+                    <strong>
+                      {employeesDirectory[emp.employeeId]
+                        ? `${employeesDirectory[emp.employeeId].firstName} ${employeesDirectory[emp.employeeId].lastName}`
+                        : `Employee ID: ${emp.employeeId}`}
+                    </strong>
+                    {employeesDirectory[emp.employeeId]?.workEmail && (
+                      <div style={{ fontSize: '0.8rem', color: '#777' }}>
+                        {employeesDirectory[emp.employeeId].workEmail}
+                      </div>
+                    )}
                     {emp.yearsExperience && (
                       <div style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>
                         {emp.yearsExperience} years of experience
@@ -134,23 +189,16 @@ export default function SkillDetails() {
                       </div>
                     )}
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{
-                      display: 'inline-block',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '8px',
-                      backgroundColor: getLevelColor(emp.level),
-                      color: 'white',
-                      fontWeight: 600,
-                      fontSize: '0.875rem'
-                    }}>
-                      {getLevelLabel(emp.level)} (Level {emp.level})
-                    </div>
-                    {emp.targetLevel && emp.targetLevel > emp.level && (
-                      <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.5rem' }}>
-                        Target: Level {emp.targetLevel}
-                      </div>
-                    )}
+                  <div style={{ textAlign:'right' }}>
+                    <span style={{
+                      display:'inline-block',
+                      background:getLevelColor(emp.level||0),
+                      color:'white',
+                      padding:'0.35rem 0.6rem',
+                      borderRadius:'6px',
+                      fontSize:'0.65rem',
+                      fontWeight:600
+                    }}>{getLevelLabel(emp.level||0)} (L{emp.level||0})</span>
                   </div>
                 </div>
               ))}
@@ -159,12 +207,25 @@ export default function SkillDetails() {
         </div>
       </div>
 
-      <div className="details-actions">
-        <button onClick={() => navigate('/admin/skills')} className="btn-secondary">
-          Back to Skills
-        </button>
+      <div style={{ marginTop:'1.5rem', display:'flex', gap:'.75rem' }}>
+        <button onClick={() => navigate('/admin/skills')} className="btn-secondary">Back</button>
+        <button onClick={() => navigate(`/admin/skills/${id}/edit`)} className="btn-primary">Edit</button>
       </div>
     </div>
   );
 }
 
+function Stat({label,value,color}:{label:string;value:string|number;color:string}) {
+  return (
+    <div style={{
+      background:'white',
+      border:'1px solid #e0e0e0',
+      borderRadius:'8px',
+      padding:'.6rem',
+      textAlign:'center'
+    }}>
+      <div style={{ fontSize:'1.1rem', fontWeight:700, color }}>{value}</div>
+      <div style={{ fontSize:'.55rem', letterSpacing:'.5px', textTransform:'uppercase', color:'#555', fontWeight:600 }}>{label}</div>
+    </div>
+  );
+}

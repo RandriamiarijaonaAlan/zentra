@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { get } from '../services/api';
-import type { SkillDto, EmployeeSkillDto } from '../types';
+import type { SkillDto, EmployeeSkillDto, EmployeeDto } from '../types';
 import '../styles/Dashboard.css';
 
 export default function EmployeeSkillMatrix() {
   const [skills, setSkills] = useState<SkillDto[]>([]);
   const [employeeSkills, setEmployeeSkills] = useState<EmployeeSkillDto[]>([]);
+  const [employees, setEmployees] = useState<Record<number, EmployeeDto>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -14,26 +15,28 @@ export default function EmployeeSkillMatrix() {
 
   async function load() {
     try {
-      const skillList = await get<SkillDto[]>('/skills');
+      const [skillList, employeeList] = await Promise.all([
+        get<SkillDto[]>('/skills'),
+        get<EmployeeDto[]>('/employees').catch(() => [])
+      ]);
       setSkills(skillList);
+      if (Array.isArray(employeeList)) {
+        const map: Record<number, EmployeeDto> = {} as any;
+        (employeeList as EmployeeDto[]).forEach(e => { if (e && e.id != null) map[e.id] = e; });
+        setEmployees(map);
+      }
 
       // Load all employee skills by fetching for each skill
       try {
         const allEmployeeSkills: EmployeeSkillDto[] = [];
-
-        // For each skill, get employees who have it
         for (const skill of skillList) {
           try {
             const skillEmployees = await get<EmployeeSkillDto[]>(`/employee-skills/by-skill/${skill.id}`);
             allEmployeeSkills.push(...skillEmployees);
-          } catch {
-            // Skip if skill has no employees or endpoint fails
-          }
+          } catch {}
         }
-
         setEmployeeSkills(allEmployeeSkills);
       } catch {
-        // If endpoint doesn't exist yet, continue with empty array
         setEmployeeSkills([]);
       }
     } catch (err) {
@@ -321,7 +324,7 @@ export default function EmployeeSkillMatrix() {
                           border: '1px solid #e5e7eb'
                         }}>
                           <span style={{ fontWeight: '500', color: '#374151' }}>
-                            Employé #{emp.employeeId}
+                            {(() => { const info = employees[emp.employeeId]; return info ? `${info.firstName} ${info.lastName}` : `Employé #${emp.employeeId}`; })()}
                           </span>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ fontSize: '0.625rem', color: '#6b7280' }}>
@@ -455,4 +458,3 @@ export default function EmployeeSkillMatrix() {
     </div>
   );
 }
-
