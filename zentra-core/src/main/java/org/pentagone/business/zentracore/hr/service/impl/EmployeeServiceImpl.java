@@ -66,48 +66,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // Méthodes de mapping manuel (en attendant le mapper)
     private EmployeeDto toDto(Employee employee) {
-        if (employee == null) return null;
         EmployeeDto dto = new EmployeeDto();
         dto.setId(employee.getId());
-        dto.setEmployeeNumber(employee.getEmployeeNumber());
         dto.setFirstName(employee.getFirstName());
         dto.setLastName(employee.getLastName());
         dto.setWorkEmail(employee.getWorkEmail());
-        dto.setWorkPhone(employee.getWorkPhone());
-        dto.setBirthDate(employee.getBirthDate());
-        dto.setGender(employee.getGender());
-        dto.setAddress(employee.getAddress());
-        dto.setCity(employee.getCity());
-        dto.setCountry(employee.getCountry());
-        dto.setHireDate(employee.getHireDate());
-        if (employee.getBaseSalary() != null) {
-            dto.setBaseSalary(new java.math.BigDecimal(employee.getBaseSalary()));
-        }
-        dto.setContractEndDate(employee.getContractEndDate());
-        dto.setJobId(employee.getJob() != null ? employee.getJob().getId() : null);
-        dto.setContractId(employee.getContract() != null ? employee.getContract().getId() : null);
         return dto;
     }
 
     private Employee toEntity(EmployeeDto dto) {
-        if (dto == null) return null;
         Employee employee = new Employee();
         employee.setId(dto.getId());
-        employee.setEmployeeNumber(dto.getEmployeeNumber());
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
         employee.setWorkEmail(dto.getWorkEmail());
-        employee.setWorkPhone(dto.getWorkPhone());
-        employee.setBirthDate(dto.getBirthDate());
-        employee.setGender(dto.getGender());
-        employee.setAddress(dto.getAddress());
-        employee.setCity(dto.getCity());
-        employee.setCountry(dto.getCountry());
-        employee.setHireDate(dto.getHireDate());
-        if (dto.getBaseSalary() != null) {
-            employee.setBaseSalary(dto.getBaseSalary().doubleValue());
-        }
-        employee.setContractEndDate(dto.getContractEndDate());
         return employee;
     }
 }
