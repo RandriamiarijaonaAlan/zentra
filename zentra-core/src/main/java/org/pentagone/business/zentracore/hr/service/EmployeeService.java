@@ -11,4 +11,3 @@ public interface EmployeeService {
     List<EmployeeDto> getAllEmployees();
     void deleteById(Long id);
 }
-
