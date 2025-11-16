@@ -27,6 +27,16 @@ import LeaveCalendar from './pages/LeaveCalendar';
 import LeaveDashboard from './pages/LeaveDashboard';
 import LeaveApproval from './pages/LeaveApproval';
 import LeaveNotifications from './pages/LeaveNotifications';
+import SkillList from './pages/SkillList';
+import EmployeeSkillMatrix from './pages/EmployeeSkillMatrix';
+import TrainingList from './pages/TrainingList';
+import TrainingSuggestions from './pages/TrainingSuggestions';
+
+// Add missing imports for CRUD pages
+import SkillForm from './pages/SkillForm';
+import SkillDetails from './pages/SkillDetails';
+import TrainingDetails from './pages/TrainingDetails';
+import TrainingForm from './pages/TrainingForm';
 
 function App() {
   return (
@@ -80,10 +90,24 @@ function App() {
           <Route path="leaves/requests/new" element={<LeaveRequestForm />} />
           <Route path="leaves/requests/:id" element={<LeaveRequestForm />} />
           <Route path="leaves/requests/:id/edit" element={<LeaveRequestForm />} />
+
+          {/* Training Management */}
+          <Route path="trainings" element={<TrainingList />} />
+          <Route path="trainings/new" element={<TrainingForm />} />
+          <Route path="trainings/:id" element={<TrainingDetails />} />
+          <Route path="trainings/:id/edit" element={<TrainingForm />} />
+          <Route path="trainings/suggestions" element={<TrainingSuggestions />} />
           <Route path="leaves/requests/pending" element={<LeaveRequestList showEmployeeColumn={true} />} />
           <Route path="leaves/requests/:requestId/approve" element={<LeaveApproval />} />
           <Route path="leaves/calendar" element={<LeaveCalendar />} />
           <Route path="leaves/notifications" element={<LeaveNotifications />} />
+
+          {/* Skill Management */}
+          <Route path="skills" element={<SkillList />} />
+          <Route path="skills/new" element={<SkillForm />} />
+          <Route path="skills/:id" element={<SkillDetails />} />
+          <Route path="skills/:id/edit" element={<SkillForm />} />
+          <Route path="skills/matrix" element={<EmployeeSkillMatrix />} />
         </Route>
       </Routes>
     </BrowserRouter>
