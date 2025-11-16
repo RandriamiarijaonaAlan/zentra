@@ -19,6 +19,7 @@ import ApplicationForm from './pages/ApplicationForm';
 import { StaffingNeedApp } from './hr/StaffingNeedApp';
 import PublicationsPage from './pages/PublicationsPage';
 import PublicationForm from './pages/PublicationForm';
+import AttendancePage from './pages/AttendancePage';
 
 function App() {
   return (
@@ -62,6 +63,8 @@ function App() {
 
           {/* Besoins */}
           <Route path="besoins" element={<StaffingNeedApp />} />
+          {/* Présences */}
+          <Route path="attendance" element={<AttendancePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
