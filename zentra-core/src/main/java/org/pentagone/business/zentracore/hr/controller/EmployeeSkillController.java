@@ -61,4 +61,3 @@ public class EmployeeSkillController {
         return ResponseEntity.noContent().build();
     }
 }
-

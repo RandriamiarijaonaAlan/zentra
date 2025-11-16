@@ -31,6 +31,8 @@ import SkillList from './pages/SkillList';
 import EmployeeSkillMatrix from './pages/EmployeeSkillMatrix';
 import TrainingList from './pages/TrainingList';
 import TrainingSuggestions from './pages/TrainingSuggestions';
+import AssignEmployeeSkill from './pages/AssignEmployeeSkill';
+import EmployeeSkills from './pages/EmployeeSkills';
 
 // Add missing imports for CRUD pages
 import SkillForm from './pages/SkillForm';
@@ -108,6 +110,8 @@ function App() {
           <Route path="skills/:id" element={<SkillDetails />} />
           <Route path="skills/:id/edit" element={<SkillForm />} />
           <Route path="skills/matrix" element={<EmployeeSkillMatrix />} />
+          <Route path="employee-skills/assign" element={<AssignEmployeeSkill />} />
+          <Route path="employee-skills" element={<EmployeeSkills />} />
         </Route>
       </Routes>
     </BrowserRouter>
