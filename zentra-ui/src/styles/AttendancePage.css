@@ -1,0 +1,28 @@
+.attendance-page { padding: 1rem; }
+.employee-selector { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.employee-selector button { padding: .4rem .8rem; border: 1px solid #e2e8f0; background:#fff; cursor:pointer; border-radius:8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.employee-selector button.selected { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border-color:transparent; }
+.actions { display:flex; gap:.5rem; margin-bottom:1rem; }
+.actions button { padding:.5rem .9rem; background:#111827; color:#fff; border:none; border-radius:8px; cursor:pointer; box-shadow: 0 2px 6px rgba(0,0,0,.1); }
+.actions button:disabled { background:#aaa; cursor: not-allowed; }
+
+/* Daily table (compact) */
+table { width:100%; border-collapse: collapse; margin-top:.5rem; }
+th, td { border:1px solid #f1f5f9; padding:.6rem .8rem; font-size:.9rem; }
+th { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; text-align:left; }
+tr.open { background:#fffbeb; }
+
+.report-filters { display:flex; gap:1rem; align-items: center; margin-top:1.5rem; }
+.report-filters .export-btn { padding:.5rem .9rem; border-radius:8px; border:2px solid #e2e8f0; background:#fff; cursor:pointer; font-weight:600; color:#334155; }
+.report-filters .export-btn:hover { border-color:#cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+.report-summary { margin-top:.75rem; display:flex; gap:2rem; flex-wrap:wrap; background:#f8fafc; padding:.9rem; border-radius:12px; font-size:.95rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+
+/* History table styled like existing lists */
+.attendance-table-container { background:#fff; border-radius:16px; box-shadow:0 2px 8px rgba(0,0,0,.08); overflow:hidden; margin-top:1rem; }
+.attendance-table { width:100%; border-collapse:collapse; }
+.attendance-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; }
+.attendance-table th { padding: 16px 20px; text-align:left; font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.5px; }
+.attendance-table tbody tr { border-bottom:1px solid #f1f5f9; transition: all .2s ease; }
+.attendance-table tbody tr:hover { background: linear-gradient(to right, #f8fafc 0%, #ffffff 100%); }
+.attendance-table td { padding:16px 20px; font-size:14px; color:#475569; }
