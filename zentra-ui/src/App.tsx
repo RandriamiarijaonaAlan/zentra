@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import EmployeeStatisticsDashboard from './pages/EmployeeStatisticsDashboard';
 import UserLogin from './pages/UserLogin';
 import QcmAttempt from './pages/QcmAttempt';
 import Success from './pages/Success';
@@ -50,6 +51,7 @@ function App() {
         {/* Routes admin */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="statistics" element={<EmployeeStatisticsDashboard />} />
           <Route path="qcms" element={<QcmList />} />
           <Route path="qcms/:id" element={<QcmDetails />} />
           <Route path="qcms/:id/edit" element={<QcmForm />} />

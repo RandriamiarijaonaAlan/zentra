@@ -1,0 +1,129 @@
+### Test Employee Statistics with Proper Data
+
+# Get current statistics (should show 0 or incomplete data)
+GET http://localhost:8080/api/employees/statistics
+
+###
+
+# Update Employee 1 with full data (Male, IT, hire 2019)
+PUT http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "id": 1,
+  "employeeNumber": "EMP001",
+  "lastName": "Doe",
+  "firstName": "John",
+  "workEmail": "john.doe@company.com",
+  "workPhone": "+33123456789",
+  "birthDate": "1990-03-15",
+  "gender": "M",
+  "address": "123 rue de la Paix",
+  "city": "Paris",
+  "country": "France",
+  "hireDate": "2019-01-15",
+  "baseSalary": 45000,
+  "contractEndDate": null,
+  "jobId": 1
+}
+
+###
+
+# Update Employee 2 with full data (Female, HR, hire 2020)
+PUT http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "id": 2,
+  "employeeNumber": "EMP002",
+  "lastName": "Smith",
+  "firstName": "Jane",
+  "workEmail": "jane.smith@company.com",
+  "workPhone": "+33123456790",
+  "birthDate": "1985-07-22",
+  "gender": "F",
+  "address": "456 avenue de la République",
+  "city": "Lyon",
+  "country": "France",
+  "hireDate": "2020-05-10",
+  "baseSalary": 48000,
+  "contractEndDate": null,
+  "jobId": 2
+}
+
+###
+
+# Update Employee 3 with full data (Male, IT, hire 2021)
+PUT http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "id": 3,
+  "employeeNumber": "EMP003",
+  "lastName": "Johnson",
+  "firstName": "Robert",
+  "workEmail": "robert.johnson@company.com",
+  "workPhone": "+33123456791",
+  "birthDate": "1992-11-08",
+  "gender": "M",
+  "address": "789 boulevard Saint-Michel",
+  "city": "Paris",
+  "country": "France",
+  "hireDate": "2021-03-01",
+  "baseSalary": 42000,
+  "contractEndDate": null,
+  "jobId": 1
+}
+
+###
+
+# Update Employee 4 with full data (Female, Marketing, hire 2022)
+PUT http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "id": 4,
+  "employeeNumber": "EMP004",
+  "lastName": "Williams",
+  "firstName": "Laura",
+  "workEmail": "laura.williams@company.com",
+  "workPhone": "+33123456792",
+  "birthDate": "1988-05-20",
+  "gender": "F",
+  "address": "321 rue de la Liberté",
+  "city": "Marseille",
+  "country": "France",
+  "hireDate": "2022-06-15",
+  "baseSalary": 41000,
+  "contractEndDate": null,
+  "jobId": 3
+}
+
+###
+
+# Update Employee 5 with full data (Male, IT, hire 2018)
+PUT http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "id": 5,
+  "employeeNumber": "EMP005",
+  "lastName": "Brown",
+  "firstName": "Michael",
+  "workEmail": "michael.brown@company.com",
+  "workPhone": "+33123456793",
+  "birthDate": "1972-09-10",
+  "gender": "M",
+  "address": "654 rue Principale",
+  "city": "Toulouse",
+  "country": "France",
+  "hireDate": "2018-02-20",
+  "baseSalary": 55000,
+  "contractEndDate": null,
+  "jobId": 1
+}
+
+###
+
+# Get updated statistics
+GET http://localhost:8080/api/employees/statistics

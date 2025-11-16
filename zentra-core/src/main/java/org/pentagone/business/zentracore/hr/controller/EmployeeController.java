@@ -1,7 +1,9 @@
 package org.pentagone.business.zentracore.hr.controller;
 
 import org.pentagone.business.zentracore.hr.dto.EmployeeDto;
+import org.pentagone.business.zentracore.hr.dto.EmployeeStatisticsDto;
 import org.pentagone.business.zentracore.hr.service.EmployeeService;
+import org.pentagone.business.zentracore.hr.service.EmployeeStatisticsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeStatisticsService employeeStatisticsService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeStatisticsService employeeStatisticsService) {
         this.employeeService = employeeService;
+        this.employeeStatisticsService = employeeStatisticsService;
     }
 
     @PostMapping
@@ -47,5 +51,16 @@ public class EmployeeController {
         employeeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Endpoint pour obtenir les statistiques complètes des employés
+     * @return EmployeeStatisticsDto avec tous les indicateurs RH
+     */
+    @GetMapping("/statistics")
+    public ResponseEntity<EmployeeStatisticsDto> getEmployeeStatistics() {
+        EmployeeStatisticsDto statistics = employeeStatisticsService.calculateEmployeeStatistics();
+        return new ResponseEntity<>(statistics, HttpStatus.OK);
+    }
 }
+
 
