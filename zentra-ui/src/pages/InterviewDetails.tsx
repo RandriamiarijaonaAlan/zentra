@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { get, patch } from '../services/api';
 import type { InterviewDto } from '../types';
 import '../styles/InterviewDetails.css';
 
 export default function InterviewDetails() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [interview, setInterview] = useState<InterviewDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
