@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import EmployeeStatisticsDashboard from './pages/EmployeeStatisticsDashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserLogin from './pages/UserLogin';
 import QcmAttempt from './pages/QcmAttempt';
@@ -19,6 +21,14 @@ import ApplicationForm from './pages/ApplicationForm';
 import HRDashboard from './hr/StaffingNeedApp';
 import PublicationsPage from './pages/PublicationsPage';
 import PublicationForm from './pages/PublicationForm';
+import { LeaveTypeList } from './pages/LeaveTypeList';
+import { LeaveTypeForm } from './pages/LeaveTypeForm';
+import { LeaveRequestList } from './pages/LeaveRequestList';
+import LeaveRequestForm from './pages/LeaveRequestForm';
+import LeaveCalendar from './pages/LeaveCalendar';
+import LeaveDashboard from './pages/LeaveDashboard';
+import LeaveApproval from './pages/LeaveApproval';
+import LeaveNotifications from './pages/LeaveNotifications';
 import AttendancePage from './pages/AttendancePage';
 import HRHome from './hr/pages/HRHome';
 import EmployeesList from './hr/pages/EmployeesList';
@@ -54,6 +64,7 @@ function App() {
         {/* Routes admin */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="statistics" element={<EmployeeStatisticsDashboard />} />
           <Route path="qcms" element={<QcmList />} />
           <Route path="qcms/:id" element={<QcmDetails />} />
           <Route path="qcms/:id/edit" element={<QcmForm />} />
@@ -72,6 +83,22 @@ function App() {
           <Route path="interviews/:id" element={<InterviewDetails />} />
           <Route path="interviews/:id/edit" element={<InterviewForm />} />
 
+          {/* Besoins */}
+          <Route path="besoins" element={<StaffingNeedApp />} />
+
+          {/* Leave Management */}
+          <Route path="leaves/dashboard" element={<LeaveDashboard />} />
+          <Route path="leaves/types" element={<LeaveTypeList />} />
+          <Route path="leaves/types/new" element={<LeaveTypeForm />} />
+          <Route path="leaves/types/:id/edit" element={<LeaveTypeForm />} />
+          <Route path="leaves/requests" element={<LeaveRequestList showEmployeeColumn={true} />} />
+          <Route path="leaves/requests/new" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/:id" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/:id/edit" element={<LeaveRequestForm />} />
+          <Route path="leaves/requests/pending" element={<LeaveRequestList showEmployeeColumn={true} />} />
+          <Route path="leaves/requests/:requestId/approve" element={<LeaveApproval />} />
+          <Route path="leaves/calendar" element={<LeaveCalendar />} />
+          <Route path="leaves/notifications" element={<LeaveNotifications />} />
           {/* Besoins: on affiche tableau de bord RH simple */}
           <Route path="besoins" element={<HRDashboard />} />
 

@@ -11,6 +11,7 @@ interface MenuItem {
 
 export default function Sidebar() {
   const location = useLocation();
+  const [openModules, setOpenModules] = useState<string[]>(['QCM', 'Entretiens', 'Candidatures', 'Congés']);
   const [openModules, setOpenModules] = useState<string[]>(['QCM', 'Entretiens', 'Candidatures', 'Personnel', 'Paie']);
 
   const toggleModule = (label: string) => {
@@ -29,6 +30,16 @@ export default function Sidebar() {
           <rect x="14" y="3" width="7" height="7"></rect>
           <rect x="14" y="14" width="7" height="7"></rect>
           <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      ),
+    },
+    {
+      label: 'Indicateur RH',
+      path: '/admin/statistics',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
         </svg>
       ),
     },
@@ -203,6 +214,74 @@ export default function Sidebar() {
               <line x1="8" y1="6" x2="21" y2="6"></line>
               <line x1="8" y1="12" x2="21" y2="12"></line>
               <line x1="8" y1="18" x2="21" y2="18"></line>
+            </svg>
+          ),
+        },
+      ],
+    },
+    {
+      label: 'Congés',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      ),
+      children: [
+        {
+          label: 'Tableau de bord',
+          path: '/admin/leaves/dashboard',
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          ),
+        },
+        {
+          label: 'Types de congés',
+          path: '/admin/leaves/types',
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 7h16"></path>
+              <path d="M4 12h16"></path>
+              <path d="M4 17h16"></path>
+            </svg>
+          ),
+        },
+        {
+          label: 'Mes demandes',
+          path: '/admin/leaves/requests',
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          ),
+        },
+        {
+          label: 'Demandes en attente',
+          path: '/admin/leaves/requests/pending',
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          ),
+        },
+        {
+          label: 'Calendrier',
+          path: '/admin/leaves/calendar',
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
           ),
         },

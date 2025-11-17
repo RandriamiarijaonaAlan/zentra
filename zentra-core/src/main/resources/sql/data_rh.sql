@@ -19,12 +19,18 @@ INSERT INTO job (title, description, required_degree, required_skills, departmen
 -- Employees
 INSERT INTO employee (employee_number, last_name, first_name, work_email, work_phone, birth_date, gender, address, city, country, hire_date, base_salary, contract_end_date, job_id) VALUES
   ('EMP-0001', 'Dupont', 'Alice', 'alice.dupont@example.com', '+33123456789', '1988-05-10', 'F', '10 Rue A', 'Paris', 'France', '2018-06-01', 45000.00, NULL, (SELECT id FROM job WHERE title = 'Développeur Fullstack')),
-  ('EMP-0002', 'Martin', 'Jean', 'jean.martin@example.com', '+33111222333', '1982-11-20', 'M', '5 Rue B', 'Lyon', 'France', '2015-09-15', 38000.00, NULL, (SELECT id FROM job WHERE title = 'Chargé de Recrutement'));
+  ('EMP-0002', 'Martin', 'Jean', 'jean.martin@example.com', '+33111222333', '1982-11-20', 'M', '5 Rue B', 'Lyon', 'France', '2015-09-15', 38000.00, NULL, (SELECT id FROM job WHERE title = 'Chargé de Recrutement')),
+  ('EMP-0003', 'Bernard', 'Sophie', 'sophie.bernard@example.com', '+33222333444', '1990-08-15', 'F', '25 Avenue des Lilas', 'Marseille', 'France', '2020-03-01', 42000.00, NULL, (SELECT id FROM job WHERE title = 'Développeur Fullstack')),
+  ('EMP-0004', 'Lefebvre', 'Pierre', 'pierre.lefebvre@example.com', '+33333444555', '1985-12-03', 'M', '18 Rue du Commerce', 'Toulouse', 'France', '2017-01-15', 47000.00, NULL, (SELECT id FROM job WHERE title = 'Développeur Fullstack')),
+  ('EMP-0005', 'Moreau', 'Lucas', 'lucas.moreau@example.com', '+33444555666', '1992-04-22', 'M', '12 Boulevard de la Liberté', 'Nantes', 'France', '2021-06-01', 40000.00, NULL, (SELECT id FROM job WHERE title = 'Chargé de Recrutement'));
 
 -- Contracts
 INSERT INTO employment_contract (employee_id, contract_number, start_date, end_date, gross_salary, annual_bonus, benefits, weekly_hours, annual_leave_days, signature_date, contract_file) VALUES
   ((SELECT id FROM employee WHERE employee_number = 'EMP-0001'), 'C-2020-001', '2018-06-01', NULL, 48000.00, 2000.00, 'Mutuelle;Tickets restaurant', 35.0, 25, '2018-06-01', 'files/contracts/c1.pdf'),
-  ((SELECT id FROM employee WHERE employee_number = 'EMP-0002'), 'C-2016-010', '2015-09-15', NULL, 40000.00, 1500.00, 'Mutuelle', 35.0, 25, '2015-09-15', 'files/contracts/c2.pdf');
+  ((SELECT id FROM employee WHERE employee_number = 'EMP-0002'), 'C-2016-010', '2015-09-15', NULL, 40000.00, 1500.00, 'Mutuelle', 35.0, 25, '2015-09-15', 'files/contracts/c2.pdf'),
+  ((SELECT id FROM employee WHERE employee_number = 'EMP-0003'), 'C-2020-003', '2020-03-01', NULL, 44000.00, 1800.00, 'Mutuelle;Tickets restaurant', 35.0, 25, '2020-03-01', 'files/contracts/c3.pdf'),
+  ((SELECT id FROM employee WHERE employee_number = 'EMP-0004'), 'C-2017-004', '2017-01-15', NULL, 49000.00, 2200.00, 'Mutuelle;Tickets restaurant;Véhicule fonction', 35.0, 25, '2017-01-15', 'files/contracts/c4.pdf'),
+  ((SELECT id FROM employee WHERE employee_number = 'EMP-0005'), 'C-2021-005', '2021-06-01', NULL, 42000.00, 1600.00, 'Mutuelle', 35.0, 25, '2021-06-01', 'files/contracts/c5.pdf');
 
 -- Publications
 INSERT INTO publication (title, description, published_date, closing_date, number_of_positions, status, job_id) VALUES
