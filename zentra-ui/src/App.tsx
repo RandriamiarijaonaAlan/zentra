@@ -29,6 +29,13 @@ import LeaveDashboard from './pages/LeaveDashboard';
 import LeaveApproval from './pages/LeaveApproval';
 import LeaveNotifications from './pages/LeaveNotifications';
 import AttendancePage from './pages/AttendancePage';
+import EmployeeProfilePage from './pages/EmployeeProfilePage';
+import LeaveDashboard from './pages/LeaveDashboard';
+import PayslipsPage from './pages/PayslipsPage';
+import DocumentRequestsPage from './pages/DocumentRequestsPage';
+import ExpenseClaimsPage from './pages/ExpenseClaimsPage';
+import HrMessagingPage from './pages/HrMessagingPage';
+import LeaveApprovalPage from './pages/LeaveApprovalPage';
 import HRHome from './hr/pages/HRHome';
 import EmployeesList from './hr/pages/EmployeesList';
 import EmployeeCreate from './hr/pages/EmployeeCreate';
@@ -132,6 +139,17 @@ function App() {
 
           {/* Présences */}
           <Route path="attendance" element={<AttendancePage />} />
+
+          {/* Congés (Admin) */}
+          <Route path="leave/approvals" element={<LeaveApprovalPage />} />
+
+          {/* Self-Service Employé */}
+          <Route path="employee/profile" element={<EmployeeProfilePage />} />
+          <Route path="employee/leave" element={<LeaveDashboard />} />
+          <Route path="employee/payslips" element={<PayslipsPage />} />
+          <Route path="employee/documents" element={<DocumentRequestsPage />} />
+          <Route path="employee/expenses" element={<ExpenseClaimsPage />} />
+          <Route path="employee/messages" element={<HrMessagingPage />} />
 
           {/* RH */}
           <Route path="hr" element={<HRHome />} />

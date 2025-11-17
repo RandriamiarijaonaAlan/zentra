@@ -1,3 +1,4 @@
+/* Leave Dashboard */
 .leave-dashboard {
   max-width: 1200px;
   margin: 0 auto;
@@ -98,6 +99,8 @@
   border: 1px solid #e9ecef;
   border-radius: 8px;
   padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -126,12 +129,25 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.leave-balance-card {
 .balance-header {
   padding: 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.leave-balance-card h2 {
+  margin: 0 0 24px 0;
+}
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
 .balance-header h3 {
   margin: 0;
   font-size: 1.1rem;
@@ -139,10 +155,22 @@
 }
 
 .balance-content {
+.balance-item {
+  background: rgba(255, 255, 255, 0.1);
   padding: 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.balance-item h3 {
+  font-size: 0.875rem;
+  margin: 0 0 12px 0;
+  opacity: 0.9;
+  font-weight: 500;
 }
 
 .balance-main {
+.balance-stats {
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -153,10 +181,13 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #007bff;
+  font-weight: bold;
 }
 
+.balance-total {
 .balance-unit {
   font-size: 1rem;
+  opacity: 0.8;
   color: #6c757d;
 }
 
@@ -166,12 +197,16 @@
   gap: 8px;
 }
 
+.balance-taken {
+  margin-top: 8px;
 .balance-row {
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
+  opacity: 0.8;
 }
 
+.leave-requests-section {
 .balance-row .label {
   color: #6c757d;
 }
@@ -210,6 +245,7 @@
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 8px;
+  padding: 24px;
   padding: 20px;
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -219,6 +255,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
+}
+
+.leave-request-form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
   margin-bottom: 16px;
 }
 
@@ -257,11 +307,19 @@
   flex-direction: column;
   gap: 4px;
   flex: 1;
+.leave-requests-list table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
+.leave-requests-list th {
+  text-align: left;
+  padding: 12px;
+  background: #f8f9fa;
 .request-type,
 .upcoming-type {
   font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
   color: #333;
 }
 
@@ -280,6 +338,7 @@
   font-size: 0.875rem;
 }
 
+.leave-requests-list td {
 .request-status {
   display: flex;
   align-items: center;
@@ -290,6 +349,7 @@
   flex-direction: column;
   align-items: center;
   padding: 12px;
+  border-bottom: 1px solid #dee2e6;
   background-color: #e7f3ff;
   border-radius: 6px;
 }
@@ -306,11 +366,18 @@
 }
 
 .badge {
+  display: inline-block;
+  padding: 4px 12px;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.badge-warning {
+  background-color: #fff3cd;
+  color: #856404;
 }
 
 .badge-success {
@@ -333,6 +400,10 @@
   color: #383d41;
 }
 
+.btn-small {
+  padding: 4px 12px;
+  font-size: 0.875rem;
+  border: none;
 .empty-state {
   padding: 40px;
   text-align: center;
@@ -408,12 +479,18 @@
   transition: all 0.2s ease;
 }
 
+.btn-danger {
+  background-color: #dc3545;
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
   color: white;
 }
 
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
 .btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
@@ -454,4 +531,5 @@
     align-self: flex-end;
   }
 }
+
 

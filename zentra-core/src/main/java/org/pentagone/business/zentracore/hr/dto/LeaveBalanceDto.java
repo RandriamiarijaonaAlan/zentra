@@ -13,6 +13,15 @@ public class LeaveBalanceDto {
     private Long leaveTypeId;
     private String leaveTypeName;
     private Integer year;
+    private Double annualTotal;
+    private Double annualTaken;
+    private Double annualRemaining;
+    private Double sickTotal;
+    private Double sickTaken;
+    private Double sickRemaining;
+    private Double exceptionalTotal;
+    private Double exceptionalTaken;
+    private Double exceptionalRemaining;
     private BigDecimal allocatedDays;
     private BigDecimal usedDays;
     private BigDecimal pendingDays;
