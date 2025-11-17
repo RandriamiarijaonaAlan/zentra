@@ -1,4 +1,3 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import EmployeeStatisticsDashboard from './pages/EmployeeStatisticsDashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserLogin from './pages/UserLogin';
@@ -57,6 +56,7 @@ import SkillForm from './pages/SkillForm';
 import SkillDetails from './pages/SkillDetails';
 import TrainingDetails from './pages/TrainingDetails';
 import TrainingForm from './pages/TrainingForm';
+import StaffingNeedApp from "./hr/StaffingNeedApp";
 
 function App() {
   return (
