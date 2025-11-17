@@ -328,3 +328,50 @@ export interface OstieRateDto {
   rate?: number | null;
 }
 
+
+// ========================================
+// Types pour Skill Management
+// ========================================
+
+export interface SkillDto {
+  id: number;
+  name: string;
+  description?: string;
+  category?: string;
+}
+
+export interface EmployeeSkillDto {
+  id: number;
+  employeeId: number;
+  skillId: number;
+  skillName: string;
+  category?: string;
+  level: number;
+  targetLevel?: number;
+  evaluationMethod?: string;
+  lastEvaluationDate?: string;
+  yearsExperience?: number;
+}
+
+export interface EmployeeSkillHistoryDto {
+  id: number;
+  employeeSkillId: number;
+  previousLevel?: number;
+  newLevel: number;
+  evaluationMethod?: string;
+  evaluationDate: string;
+}
+
+export interface TrainingDto {
+  id: number;
+  title: string;
+  description?: string;
+  maxLevelReached: number;
+  targetSkillIds: number[];
+}
+
+export interface SkillLevelDto {
+  id: number;
+  label: string;
+  value: number;
+}

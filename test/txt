@@ -1,0 +1,175 @@
+1. Objectif de la Gestion des Compétences
+
+Mettre en place un système permettant de :
+
+définir un référentiel clair des compétences de l’entreprise,
+
+évaluer les compétences des employés,
+
+cartographier le niveau global de compétences de l’organisation,
+
+détecter les écarts,
+
+recommander des actions d’amélioration (ex. formations).
+
+2. Modèle de données (strictement compétences)
+A. Competence
+
+id
+
+name
+
+description
+
+category (technique, comportementale, métier)
+
+B. NiveauCompetence
+
+id
+
+label (Beginner, Intermediate, Advanced, Expert)
+
+value (1,2,3,4)
+
+C. Employe
+
+id
+
+first_name
+
+last_name
+
+D. EmployeCompetence
+
+id
+
+employee_id
+
+competence_id
+
+current_level (FK → NiveauCompetence.value)
+
+target_level (optionnel)
+
+evaluation_method (self, manager, test)
+
+updated_at
+
+E. Formation (optionnel)
+
+id
+
+title
+
+target_competences
+
+max_level_reached
+
+3. Fonctionnalités du module
+A. Référentiel des compétences
+
+Créer / modifier / supprimer des compétences.
+
+Organiser les compétences par catégories.
+
+Définir les niveaux standards (1 à 4).
+
+B. Évaluation des compétences
+
+Auto-évaluation.
+
+Évaluation par un manager.
+
+Évaluation via test / certification.
+
+Enregistrement de la date et du mode d’évaluation.
+
+Historisation des changements.
+
+C. Cartographie des compétences
+
+Vue par employé : toutes ses compétences + niveau.
+
+Vue par compétence : employés qui la possèdent + niveau.
+
+Matrice “employés × compétences”.
+
+Requêtes filtrées : par équipe, par compétence, par niveau.
+
+D. Suivi de progression
+
+Graphiques des niveaux au fil du temps.
+
+Alertes : compétences jamais évaluées / stagnantes.
+
+Historique complet de la progression.
+
+E. Suggestion de formations (optionnel)
+
+Associer les gaps détectés aux formations correspondantes.
+
+Proposer les formations les plus pertinentes pour atteindre le niveau cible.
+
+4. Flux de données (workflow global)
+Étape 1 — Création du référentiel
+
+L’admin RH crée les compétences.
+
+Définit les catégories.
+
+Règle les niveaux de référence.
+
+Étape 2 — Attribution des compétences aux employés
+
+RH ou manager associe les compétences pertinentes.
+
+Définit un niveau initial (auto ou manager).
+
+Étape 3 — Évaluation
+
+L’employé ou le manager met à jour le niveau.
+
+Le système enregistre le mode + date.
+
+Historisation automatique.
+
+Étape 4 — Cartographie
+
+Le système affiche toutes les compétences de l’entreprise.
+
+Matrice compétences × employés.
+
+Rapports filtrés par catégorie ou par niveau.
+
+Étape 5 — Progression et formations
+
+Le logiciel détecte les compétences faibles.
+
+Suggère des formations (si module activé).
+
+Après formation, mise à jour du niveau.
+
+5. Architecture fonctionnelle (modules)
+A. Skills Repository
+
+CRUD des compétences
+
+Gestion des catégories
+
+Gestion des niveaux
+
+B. Employee Skills
+
+Attribution des compétences
+
+Évaluation et mise à jour
+
+Historique des niveaux
+
+C. Skills Dashboard
+
+Matrice compétences
+
+Vision d’équipe ou globale
+
+Graphiques d’évolution

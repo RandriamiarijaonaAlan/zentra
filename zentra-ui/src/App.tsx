@@ -45,6 +45,18 @@ import PayrollPage from './hr/pages/PayrollPage';
 import PayStubPage from './hr/pages/PayStubPage';
 import BonusAdvancePage from './hr/pages/BonusAdvancePage';
 import ContributionConfiguration from './pages/ContributionConfiguration';
+import SkillList from './pages/SkillList';
+import EmployeeSkillMatrix from './pages/EmployeeSkillMatrix';
+import TrainingList from './pages/TrainingList';
+import TrainingSuggestions from './pages/TrainingSuggestions';
+import AssignEmployeeSkill from './pages/AssignEmployeeSkill';
+import EmployeeSkills from './pages/EmployeeSkills';
+
+// Add missing imports for CRUD pages
+import SkillForm from './pages/SkillForm';
+import SkillDetails from './pages/SkillDetails';
+import TrainingDetails from './pages/TrainingDetails';
+import TrainingForm from './pages/TrainingForm';
 
 function App() {
   return (
@@ -95,10 +107,26 @@ function App() {
           <Route path="leaves/requests/new" element={<LeaveRequestForm />} />
           <Route path="leaves/requests/:id" element={<LeaveRequestForm />} />
           <Route path="leaves/requests/:id/edit" element={<LeaveRequestForm />} />
+
+          {/* Training Management */}
+          <Route path="trainings" element={<TrainingList />} />
+          <Route path="trainings/new" element={<TrainingForm />} />
+          <Route path="trainings/:id" element={<TrainingDetails />} />
+          <Route path="trainings/:id/edit" element={<TrainingForm />} />
+          <Route path="trainings/suggestions" element={<TrainingSuggestions />} />
           <Route path="leaves/requests/pending" element={<LeaveRequestList showEmployeeColumn={true} />} />
           <Route path="leaves/requests/:requestId/approve" element={<LeaveApproval />} />
           <Route path="leaves/calendar" element={<LeaveCalendar />} />
           <Route path="leaves/notifications" element={<LeaveNotifications />} />
+
+          {/* Skill Management */}
+          <Route path="skills" element={<SkillList />} />
+          <Route path="skills/new" element={<SkillForm />} />
+          <Route path="skills/:id" element={<SkillDetails />} />
+          <Route path="skills/:id/edit" element={<SkillForm />} />
+          <Route path="skills/matrix" element={<EmployeeSkillMatrix />} />
+          <Route path="employee-skills/assign" element={<AssignEmployeeSkill />} />
+          <Route path="employee-skills" element={<EmployeeSkills />} />
           {/* Besoins: on affiche tableau de bord RH simple */}
           <Route path="besoins" element={<HRDashboard />} />
 
