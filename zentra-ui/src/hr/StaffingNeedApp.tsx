@@ -1,78 +1,35 @@
-import { useState } from 'react';
-import type { StaffingNeed } from './types/StaffingNeed';
-import { StaffingNeedList } from './components/StaffingNeedList';
-import { StaffingNeedForm } from './components/StaffingNeedForm';
-import { StaffingNeedDetail } from './components/StaffingNeedDetail';
-import './StaffingNeedApp.css';
+import React, { useEffect, useState } from 'react';
+import { listEmployees } from './services/hrApi';
+import type { EmployeeDto } from './types/employee';
+import { EmployeeForm } from './components/EmployeeForm';
+import { EmployeeList } from './components/EmployeeList';
+import { ContractManager } from './components/ContractManager';
+import { JobHistoryManager } from './components/JobHistoryManager';
+import { HRDocumentManager } from './components/HRDocumentManager';
 
-type View = 'list' | 'form' | 'detail';
+const HRDashboard: React.FC = () => {
+  const [employees, setEmployees] = useState<EmployeeDto[]>([]);
+  const [selected, setSelected] = useState<EmployeeDto | undefined>();
 
-export const StaffingNeedApp = () => {
-  const [currentView, setCurrentView] = useState<View>('list');
-  const [selectedNeed, setSelectedNeed] = useState<StaffingNeed | undefined>();
-
-  const handleCreate = () => {
-    setSelectedNeed(undefined);
-    setCurrentView('form');
-  };
-
-  const handleEdit = (need: StaffingNeed) => {
-    setSelectedNeed(need);
-    setCurrentView('form');
-  };
-
-  const handleView = (need: StaffingNeed) => {
-    setSelectedNeed(need);
-    setCurrentView('detail');
-  };
-
-  const handleSave = () => {
-    setCurrentView('list');
-    setSelectedNeed(undefined);
-  };
-
-  const handleCancel = () => {
-    setCurrentView('list');
-    setSelectedNeed(undefined);
-  };
+  const load = async () => setEmployees(await listEmployees());
+  useEffect(() => { load(); }, []);
 
   return (
-    <div className="staffing-need-app">
-      <header className="app-header">
-        <h1>🏢 Gestion des Besoins en Personnel</h1>
-        {currentView === 'list' && (
-          <button className="btn-create" onClick={handleCreate}>
-            ➕ Nouveau Besoin
-          </button>
-        )}
-        {currentView !== 'list' && (
-          <button className="btn-back" onClick={handleCancel}>
-            ← Retour à la liste
-          </button>
-        )}
-      </header>
-
-      <main className="app-content">
-        {currentView === 'list' && (
-          <StaffingNeedList onEdit={handleEdit} onView={handleView} />
-        )}
-
-        {currentView === 'form' && (
-          <StaffingNeedForm
-            need={selectedNeed}
-            onSave={handleSave}
-            onCancel={handleCancel}
-          />
-        )}
-
-        {currentView === 'detail' && selectedNeed && (
-          <StaffingNeedDetail
-            need={selectedNeed}
-            onEdit={() => handleEdit(selectedNeed)}
-            onClose={handleCancel}
-          />
-        )}
-      </main>
+    <div style={{ padding: 16 }}>
+      <h2>Gestion RH Simple</h2>
+        <EmployeeForm initial={selected} onSaved={() => { setSelected(undefined); load(); }} />
+      <EmployeeList employees={employees} onDeleted={(id) => setEmployees(es => es.filter(e => e.id !== id))} onSelect={setSelected} />
+      {selected?.id && (
+        <>
+          <ContractManager employeeId={selected.id} />
+          <JobHistoryManager employeeId={selected.id} />
+          <HRDocumentManager employeeId={selected.id} />
+        </>
+      )}
     </div>
   );
 };
+
+export default HRDashboard;
+
+// Garder ce dashboard simple pour compatibilité, mais l’entrée principale est maintenant via /admin/hr

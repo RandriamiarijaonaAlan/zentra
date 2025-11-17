@@ -303,6 +303,31 @@ export interface LeaveNotificationDto {
   readAt?: string;
   sentAt: string;
 }
+// ========================================
+// Types pour Contributions (CNAPS, OSTIE, IRSA)
+// ========================================
+
+export interface IrsaRateDto {
+  id: number;
+  minIncome?: number | null;
+  maxIncome?: number | null;
+  rate?: number | null;
+  amount?: number | null;
+}
+
+export interface CnapsRateDto {
+  id: number;
+  ceilingBaseAmount?: number | null;
+  ceilingRate?: number | null;
+  rate?: number | null;
+  ceilingAmount?: number | null;
+}
+
+export interface OstieRateDto {
+  id: number;
+  rate?: number | null;
+}
+
 
 // ========================================
 // Types pour Skill Management

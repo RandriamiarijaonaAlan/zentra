@@ -30,6 +30,15 @@ public class TimeEntry extends BaseEntity {
     @Column(name = "hours_worked")
     private Double hoursWorked;
 
+    @Column(name = "overtime_hours")
+    private Double overtimeHours; // Heures supplémentaires calculées
+
+    @Column(name = "late_minutes")
+    private Integer lateMinutes; // Minutes de retard (arrivée après heure standard)
+
+    @Column(name = "break_minutes")
+    private Integer breakMinutes; // Minutes de pause déduites
+
     @Column(name = "entry_type", length = 50)
     private String entryType; // MANUAL, BADGE, MOBILE
 

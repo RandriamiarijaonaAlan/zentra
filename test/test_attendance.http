@@ -1,0 +1,24 @@
+### Check-In employé Alice (adapter l'ID si différent)
+POST http://localhost:8080/api/attendance/check-in?employeeId=1&type=MANUAL
+Content-Type: application/json
+
+### Check-Out employé Alice
+POST http://localhost:8080/api/attendance/check-out?employeeId=1
+Content-Type: application/json
+
+### Pointages du jour pour Alice
+GET http://localhost:8080/api/attendance/daily?employeeId=1&date={{date}}
+Content-Type: application/json
+
+### Rapport sur la semaine courante pour Alice
+GET http://localhost:8080/api/attendance/report?employeeId=1&start={{start}}&end={{end}}
+Content-Type: application/json
+
+### Export CSV rapport (paie)
+GET http://localhost:8080/api/attendance/report/export?employeeId=1&start={{start}}&end={{end}}
+Accept: text/csv
+
+### Variables (à définir dans l'outil HTTP de VS Code)
+@date={{$datetime isoDate}}
+@start={{$datetime isoDate -7 d}}
+@end={{$datetime isoDate}}

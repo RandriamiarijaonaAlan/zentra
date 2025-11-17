@@ -48,4 +48,16 @@ public class Contract extends BaseEntity {
     
     @Column(name = "contract_file", length = 255)
     private String contractFile;
+
+    @Column(name = "contract_type", length = 50)
+    private String contractType; // CDI, CDD, STAGE, etc.
+
+    @Column(name = "duration_months")
+    private Integer durationMonths;
+
+    @Column(name = "trial_period_months")
+    private Integer trialPeriodMonths;
+
+    @Column(name = "renewable")
+    private Boolean renewable;
 }
