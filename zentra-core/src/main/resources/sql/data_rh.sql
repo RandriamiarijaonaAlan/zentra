@@ -119,3 +119,51 @@ COMMIT;
 -- Ajout d'une interview planifiée pour Randy Matia (application avec status interview_scheduled)
 INSERT INTO interview (candidate_id, interviewer_id, interview_date, start_time, duration_minutes, interview_type, location, status, comment, score, application_id) VALUES
   ((SELECT id FROM candidate WHERE email = 'randy.matia@example.com'), (SELECT id FROM employee WHERE employee_number = 'EMP-0002'), '2025-04-25', '09:30:00', 30, 'PRESENTIEL', 'Bureau Lyon - Salle 3', 'SCHEDULED', 'A programmer après QCM', NULL, (SELECT id FROM application WHERE candidate_id = (SELECT id FROM candidate WHERE email = 'randy.matia@example.com') ORDER BY applied_at LIMIT 1));
+
+INSERT INTO department (name, description, annual_budget)
+VALUES
+    ('Développement', 'Équipe de développement logiciel', 250000.00),
+    ('Marketing', 'Marketing & communication', 120000.00),
+    ('Finance', 'Comptabilité et finances', 100000.00);
+
+-- 2) Postes (jobs) — référence au département par nom
+INSERT INTO job (title, description, required_degree, required_skills, department_id)
+VALUES
+    ('Développeur Frontend', 'Travail sur UI/UX et composants React', 'Bac+3', 'React, TypeScript, HTML, CSS', (SELECT id FROM department WHERE name = 'Développement')),
+    ('Développeur Backend', 'API et logique serveur (Java/Spring)', 'Bac+3', 'Java, Spring, SQL', (SELECT id FROM department WHERE name = 'Développement')),
+    ('Chef de projet', 'Gestion de projets IT', 'Bac+5', 'Management, Agile', (SELECT id FROM department WHERE name = 'Développement')),
+    ('Marketing Manager', 'Stratégie marketing digital', 'Bac+3', 'SEO, SEA, Analytics', (SELECT id FROM department WHERE name = 'Marketing'));
+
+-- 3) Employés
+INSERT INTO employee (employee_number, last_name, first_name, work_email, work_phone, birth_date, gender, address, city, country, hire_date, base_salary, contract_end_date, job_id)
+VALUES
+    ('EMP-2001', 'Dupont', 'Marie', 'marie.dupont@example.com', '+33123456789', '1988-03-12', 'F', '12 rue de la Paix', 'Paris', 'France', '2020-05-15', 4500.00, NULL, (SELECT id FROM job WHERE title = 'Développeur Backend')),
+    ('EMP-2002', 'Martin', 'Jean', 'jean.martin@example.com', '+33198765432', '1985-07-02', 'M', '5 avenue Victor', 'Lyon', 'France', '2019-09-01', 4000.00, NULL, (SELECT id FROM job WHERE title = 'Marketing Manager')),
+    ('EMP-2003', 'Bernard', 'Sofia', 'sofia.bernard@example.com', NULL, '1992-11-20', 'F', '34 rue des Fleurs', 'Toulouse', 'France', '2021-02-20', 3500.00, '2023-02-19', (SELECT id FROM job WHERE title = 'Développeur Frontend'));
+
+-- 4) Contrats (employment_contract)
+INSERT INTO employment_contract (employee_id, contract_number, start_date, end_date, gross_salary, annual_bonus, benefits, weekly_hours, annual_leave_days, signature_date, contract_file, contract_type, duration_months, trial_period_months, renewable)
+VALUES
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2001'), 'C-2020-001', '2020-05-15', NULL, 4500.00, 3000.00, 'Tickets restaurant, mutuelle', 35.0, 25, '2020-05-14', NULL, 'CDI', NULL, 3, true),
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2002'), 'C-2019-001', '2019-09-01', NULL, 4000.00, 2000.00, 'Mutuelle', 35.0, 25, '2019-08-30', NULL, 'CDI', NULL, 3, true),
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2003'), 'C-2021-001', '2021-02-20', '2023-02-19', 3200.00, 0.00, 'CDD - pas d''avantages', 35.0, 25, '2021-02-18', NULL, 'CDD', 24, 0, false);
+
+-- 5) Historique des postes (job_history)
+INSERT INTO job_history (employee_id, job_id, department_id, start_date, end_date, reason)
+VALUES
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2001'), (SELECT id FROM job WHERE title = 'Développeur Backend'), (SELECT id FROM department WHERE name = 'Développement'), '2020-05-15', NULL, 'Embauche directe'),
+    ((SELECT id FROM employee WHERE employee_number = 'EMP20002'), (SELECT id FROM job WHERE title = 'Marketing Manager'), (SELECT id FROM department WHERE name = 'Marketing'), '2019-09-01', NULL, 'Recrutement'),
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2003'), (SELECT id FROM job WHERE title = 'Développeur Frontend'), (SELECT id FROM department WHERE name = 'Développement'), '2021-02-20', '2023-02-19', 'CDD terminé');
+
+-- 6) Documents RH (hr_document)
+INSERT INTO hr_document (employee_id, doc_type, file_path, uploaded_at, expiry_date, visible_to_employee)
+VALUES
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2001'), 'CV', 'uploads/employees/1/cv_marie_dupont.pdf', NOW(), NULL, true),
+    ((SELECT id FROM employee WHERE employee_number = 'EMP-2002'), 'CONTRAT', 'uploads/employees/2/contract_jean_martin.pdf', NOW(), NULL, false);
+
+-- 7) Besoins en personnel (staffing_need)
+INSERT INTO staffing_need (title, description, number_of_positions, priority, status, required_start_date, budget_allocated, justification, department_id, job_id, requested_by)
+VALUES
+    ('Développeur Backend Senior', 'Renforcement de l''équipe backend', 1, 'High', 'Open', '2025-01-15', 60000.00, 'Projet critique', (SELECT id FROM department WHERE name = 'Développement'), (SELECT id FROM job WHERE title = 'Développeur Backend'), (SELECT id FROM employee WHERE employee_number = 'EMP-0001')),
+    ('Spécialiste Marketing Digital', 'Améliorer la présence en ligne', 1, 'Medium', 'In Progress', '2025-02-01', 40000.00, 'Campagne Q1', (SELECT id FROM department WHERE name = 'Marketing'), (SELECT id FROM job WHERE title = 'Marketing Manager'), (SELECT id FROM employee WHERE employee_number = 'EMP-0002'));
+

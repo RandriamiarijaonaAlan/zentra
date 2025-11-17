@@ -7,35 +7,39 @@ const client: AxiosInstance = axios.create({
 
 type Headers = Record<string, string>;
 
-client.interceptors.request.use((config) => {
-    const token = localStorage.getItem('qcm_token');
-    if (token) (config.headers as Headers).Authorization = `Bearer ${token}`;
-    return config;
-});
+authIntercept();
 
-export async function get<T = any>(path: string, headers: Headers = {}): Promise<T> {
+function authIntercept() {
+  client.interceptors.request.use((config) => {
+      const token = localStorage.getItem('qcm_token');
+      if (token) (config.headers as Headers).Authorization = `Bearer ${token}`;
+      return config;
+  });
+}
+
+export async function get<T = unknown>(path: string, headers: Headers = {}): Promise<T> {
     const res = await client.get(path, {headers});
-    return res.data;
+    return res.data as T;
 }
 
-export async function post<T = any>(path: string, data?: any, headers: Headers = {}): Promise<T> {
+export async function post<T = unknown>(path: string, data?: unknown, headers: Headers = {}): Promise<T> {
     const res = await client.post(path, data, {headers});
-    return res.data;
+    return res.data as T;
 }
 
-export async function put<T = any>(path: string, data?: any, headers: Headers = {}): Promise<T> {
+export async function put<T = unknown>(path: string, data?: unknown, headers: Headers = {}): Promise<T> {
     const res = await client.put(path, data, {headers});
-    return res.data;
+    return res.data as T;
 }
 
-export async function patch<T = any>(path: string, data?: any, headers: Headers = {}): Promise<T> {
+export async function patch<T = unknown>(path: string, data?: unknown, headers: Headers = {}): Promise<T> {
     const res = await client.patch(path, data, {headers});
-    return res.data;
+    return res.data as T;
 }
 
-export async function del<T = any>(path: string, headers: Headers = {}): Promise<T> {
+export async function del<T = unknown>(path: string, headers: Headers = {}): Promise<T> {
     const res = await client.delete(path, {headers});
-    return res.data;
+    return res.data as T;
 }
 
 export async function downloadFile(filePath: string, fileName: string): Promise<void> {
@@ -43,7 +47,8 @@ export async function downloadFile(filePath: string, fileName: string): Promise<
         const token = localStorage.getItem('qcm_token');
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
-        const response = await fetch(`${apiUrl}/files/${filePath}`, {
+        const urlWithQuery = `${apiUrl}/files/download?path=${encodeURIComponent(filePath)}`;
+        const response = await fetch(urlWithQuery, {
             method: 'GET',
             headers: {
                 'Authorization': token ? `Bearer ${token}` : '',
