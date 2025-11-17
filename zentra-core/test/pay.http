@@ -1,0 +1,1 @@
+POST http://localhost:8080/api/pay/paystub/generate?employeeId=1000&yearMonth=2025-01
