@@ -31,6 +31,10 @@ import DocumentsPage from './hr/pages/DocumentsPage';
 import UploadDocumentPage from './hr/pages/UploadDocumentPage';
 import StaffingNeedsList from './hr/pages/StaffingNeedsList';
 import StaffingNeedCreate from './hr/pages/StaffingNeedCreate';
+import PayrollPage from './hr/pages/PayrollPage';
+import PayStubPage from './hr/pages/PayStubPage';
+import BonusAdvancePage from './hr/pages/BonusAdvancePage';
+import ContributionConfiguration from './pages/ContributionConfiguration';
 
 function App() {
   return (
@@ -68,12 +72,11 @@ function App() {
           <Route path="interviews/:id" element={<InterviewDetails />} />
           <Route path="interviews/:id/edit" element={<InterviewForm />} />
 
-          {/* Besoins */}
-          <Route path="besoins" element={<StaffingNeedApp />} />
-          {/* Présences */}
-          <Route path="attendance" element={<AttendancePage />} />
           {/* Besoins: on affiche tableau de bord RH simple */}
           <Route path="besoins" element={<HRDashboard />} />
+
+          {/* Présences */}
+          <Route path="attendance" element={<AttendancePage />} />
 
           {/* RH */}
           <Route path="hr" element={<HRHome />} />
@@ -91,6 +94,12 @@ function App() {
           <Route path="hr/job-history" element={<JobHistoryPage />} />
           <Route path="hr/documents" element={<DocumentsPage />} />
           <Route path="hr/upload-document" element={<UploadDocumentPage />} />
+
+          {/* Gestion de Paie */}
+          <Route path="hr/pay" element={<PayrollPage />} />
+          <Route path="hr/pay/paystub" element={<PayStubPage />} />
+          <Route path="hr/pay/bonus-advance" element={<BonusAdvancePage />} />
+          <Route path="hr/contributions" element={<ContributionConfiguration />} />
         </Route>
       </Routes>
     </BrowserRouter>
