@@ -24,4 +24,6 @@ public class EmployeeDto {
     private LocalDate contractEndDate;
     private Long contractId;
     private Long jobId;
+    private String photoUrl;
+
 }
