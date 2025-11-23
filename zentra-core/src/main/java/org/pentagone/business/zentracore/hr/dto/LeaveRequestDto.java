@@ -5,6 +5,7 @@ import org.pentagone.business.zentracore.hr.entity.LeaveRequest.LeaveRequestStat
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class LeaveRequestDto {
@@ -16,8 +17,14 @@ public class LeaveRequestDto {
     private String leaveTypeColor;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Double days;
+    private String type;
+    private String status;
     private BigDecimal daysRequested;
     private String reason;
+    private Long approverId;
+    private String approverName;
+    private LocalDateTime approvedAt;
     private LeaveRequestStatus status;
     private Long approvedById;
     private String approvedByName;

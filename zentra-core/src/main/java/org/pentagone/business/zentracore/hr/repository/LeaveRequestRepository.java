@@ -14,6 +14,11 @@ import java.util.List;
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
 
     List<LeaveRequest> findByEmployeeIdOrderByStartDateDesc(Long employeeId);
+    
+    List<LeaveRequest> findByEmployeeIdAndStatus(Long employeeId, String status);
+
+    List<LeaveRequest> findByStatus(String status);
+    
 
     List<LeaveRequest> findByStatusOrderByCreatedAtDesc(LeaveRequestStatus status);
 

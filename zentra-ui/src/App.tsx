@@ -35,6 +35,30 @@ import EmployeeCreate from './hr/features/employee/pages/EmployeeCreate.tsx';
 import EmployeeEdit from './hr/features/employee/pages/EmployeeEdit.tsx';
 import EmployeeProfile from './hr/features/employee/pages/EmployeeProfile.tsx';
 import EmployeeContracts from './hr/features/employee/pages/EmployeeContracts.tsx';
+import PublicationsPage from './pages/PublicationsPage';
+import PublicationForm from './pages/PublicationForm';
+import { LeaveTypeList } from './pages/LeaveTypeList';
+import { LeaveTypeForm } from './pages/LeaveTypeForm';
+import { LeaveRequestList } from './pages/LeaveRequestList';
+import LeaveRequestForm from './pages/LeaveRequestForm';
+import LeaveCalendar from './pages/LeaveCalendar';
+import LeaveDashboard from './pages/LeaveDashboard';
+import LeaveApproval from './pages/LeaveApproval';
+import LeaveNotifications from './pages/LeaveNotifications';
+import AttendancePage from './pages/AttendancePage';
+import EmployeeProfilePage from './pages/EmployeeProfilePage';
+import LeaveDashboard from './pages/LeaveDashboard';
+import PayslipsPage from './pages/PayslipsPage';
+import DocumentRequestsPage from './pages/DocumentRequestsPage';
+import ExpenseClaimsPage from './pages/ExpenseClaimsPage';
+import HrMessagingPage from './pages/HrMessagingPage';
+import LeaveApprovalPage from './pages/LeaveApprovalPage';
+import HRHome from './hr/pages/HRHome';
+import EmployeesList from './hr/pages/EmployeesList';
+import EmployeeCreate from './hr/pages/EmployeeCreate';
+import EmployeeEdit from './hr/pages/EmployeeEdit';
+import EmployeeProfile from './hr/pages/EmployeeProfile';
+import EmployeeContracts from './hr/pages/EmployeeContracts';
 import JobHistoryPage from './hr/pages/JobHistoryPage';
 import DocumentsPage from './hr/features/documents/pages/DocumentsPage.tsx';
 import UploadDocumentPage from './hr/features/documents/pages/UploadDocumentPage.tsx';
@@ -132,6 +156,17 @@ function App() {
 
           {/* Présences */}
           <Route path="attendance" element={<AttendancePage />} />
+
+          {/* Congés (Admin) */}
+          <Route path="leave/approvals" element={<LeaveApprovalPage />} />
+
+          {/* Self-Service Employé */}
+          <Route path="employee/profile" element={<EmployeeProfilePage />} />
+          <Route path="employee/leave" element={<LeaveDashboard />} />
+          <Route path="employee/payslips" element={<PayslipsPage />} />
+          <Route path="employee/documents" element={<DocumentRequestsPage />} />
+          <Route path="employee/expenses" element={<ExpenseClaimsPage />} />
+          <Route path="employee/messages" element={<HrMessagingPage />} />
 
           {/* RH */}
           <Route path="hr" element={<HRHome />} />
