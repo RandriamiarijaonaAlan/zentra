@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ContractDto } from '../types/contract';
 import { listContractsByEmployee, createContract, updateContract, deleteContract } from '../services/hrApi';
-import '../../styles/HRPages.css';
+import '../features/documents/styles/HRPages.css';
 
 interface Props { employeeId: number; }
 
@@ -196,7 +196,7 @@ export const ContractManager: React.FC<Props> = ({ employeeId }) => {
 
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">Salaire brut mensuel (€)</label>
+                <label className="form-label">Salaire brut mensuel (Ar)</label>
                 <input
                   type="number"
                   name="grossSalary"
@@ -209,7 +209,7 @@ export const ContractManager: React.FC<Props> = ({ employeeId }) => {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Prime annuelle (€)</label>
+                <label className="form-label">Prime annuelle (Ar)</label>
                 <input
                   type="number"
                   name="annualBonus"
@@ -381,7 +381,7 @@ export const ContractManager: React.FC<Props> = ({ employeeId }) => {
                   <div className="hr-stat">
                     <span className="hr-stat-label">Salaire brut</span>
                     <span className="hr-stat-value">
-                      {contract.grossSalary.toLocaleString()} €
+                      {contract.grossSalary.toLocaleString()} Ar
                     </span>
                   </div>
                 )}

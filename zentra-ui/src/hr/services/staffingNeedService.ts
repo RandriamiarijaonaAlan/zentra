@@ -1,5 +1,5 @@
 import type { StaffingNeed } from '../types/StaffingNeed';
-import { get, post, put, del } from '../../services/api';
+import { get, post, put, del } from './api.ts';
 
 export const staffingNeedService = {
   // Obtenir tous les besoins

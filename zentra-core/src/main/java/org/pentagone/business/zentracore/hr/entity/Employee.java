@@ -64,7 +64,5 @@ public class Employee extends BaseEntity {
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private Contract contract;
 
-    public Double getBaseSalary() {
-        return contract.getGrossSalary();
-    }
+
 }

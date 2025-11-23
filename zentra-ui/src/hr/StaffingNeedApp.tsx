@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { listEmployees } from './services/hrApi';
 import type { EmployeeDto } from './types/employee';
-import { EmployeeForm } from './components/EmployeeForm';
-import { EmployeeList } from './components/EmployeeList';
+import { EmployeeForm } from './features/employee/components/EmployeeForm.tsx';
+import { EmployeeList } from './features/employee/components/EmployeeList.tsx';
 import { ContractManager } from './components/ContractManager';
-import { JobHistoryManager } from './components/JobHistoryManager';
-import { HRDocumentManager } from './components/HRDocumentManager';
+import { JobHistoryManager } from './features/employee/components/JobHistoryManager.tsx';
+import { HRDocumentManager } from './features/documents/components/HRDocumentManager.tsx';
 
 const HRDashboard: React.FC = () => {
   const [employees, setEmployees] = useState<EmployeeDto[]>([]);

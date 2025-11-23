@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../../services/api';
+import { get, post, put, del } from './api.ts';
 import type { EmployeeDto } from '../types/employee';
 import type { ContractDto } from '../types/contract';
 import type { JobHistoryDto } from '../types/jobHistory';
