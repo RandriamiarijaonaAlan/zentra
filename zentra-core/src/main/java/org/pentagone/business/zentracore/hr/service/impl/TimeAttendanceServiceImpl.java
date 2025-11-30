@@ -1,6 +1,7 @@
 package org.pentagone.business.zentracore.hr.service.impl;
 
 import org.pentagone.business.zentracore.common.exception.EntityNotFoundException;
+import org.pentagone.business.zentracore.hr.config.AttendanceProperties;
 import org.pentagone.business.zentracore.hr.dto.AttendanceReportDTO;
 import org.pentagone.business.zentracore.hr.dto.TimeEntryDto;
 import org.pentagone.business.zentracore.hr.entity.Employee;
@@ -24,16 +25,14 @@ public class TimeAttendanceServiceImpl implements TimeAttendanceService {
 
     private final TimeEntryRepository timeEntryRepository;
     private final EmployeeRepository employeeRepository;
-
-    // Règles métier simplifiées
-    private static final LocalTime STANDARD_START = LocalTime.of(9, 0);
-    private static final int STANDARD_DAY_MINUTES = 8 * 60; // 8h
-    private static final int STANDARD_BREAK_MINUTES = 60; // Pause déjeuner présumée si >6h travaillées
+    private final AttendanceProperties attendanceProperties;
 
     public TimeAttendanceServiceImpl(TimeEntryRepository timeEntryRepository,
-                                     EmployeeRepository employeeRepository) {
+                                     EmployeeRepository employeeRepository,
+                                     AttendanceProperties attendanceProperties) {
         this.timeEntryRepository = timeEntryRepository;
         this.employeeRepository = employeeRepository;
+        this.attendanceProperties = attendanceProperties;
     }
 
     @Override
@@ -54,9 +53,10 @@ public class TimeAttendanceServiceImpl implements TimeAttendanceService {
         entry.setCheckIn(when);
         entry.setEntryType(entryType);
 
-        // Calcul retard
-        if (when.toLocalTime().isAfter(STANDARD_START)) {
-            int late = (int) Duration.between(STANDARD_START, when.toLocalTime()).toMinutes();
+        // Calcul retard basé sur l'heure configurée
+        LocalTime standardStart = attendanceProperties.getWorkdayStart();
+        if (when.toLocalTime().isAfter(standardStart)) {
+            int late = (int) Duration.between(standardStart, when.toLocalTime()).toMinutes();
             entry.setLateMinutes(late);
         } else {
             entry.setLateMinutes(0);
@@ -78,15 +78,17 @@ public class TimeAttendanceServiceImpl implements TimeAttendanceService {
         open.setCheckOut(when);
         long totalMinutes = Duration.between(open.getCheckIn(), open.getCheckOut()).toMinutes();
 
-        // Pause automatique si journée > 6h de travail
-        int breakMinutes = totalMinutes > 6 * 60 ? STANDARD_BREAK_MINUTES : 0;
+        // Pause automatique si journée dépasse le seuil configuré
+        int breakThresholdMinutes = attendanceProperties.getBreakThresholdHours() * 60;
+        int breakMinutes = totalMinutes > breakThresholdMinutes ? attendanceProperties.getBreakMinutes() : 0;
         open.setBreakMinutes(breakMinutes);
 
         int worked = (int) (totalMinutes - breakMinutes);
         double hoursWorked = worked / 60.0;
         open.setHoursWorked(hoursWorked);
 
-        double overtime = Math.max(0, hoursWorked - 8.0);
+        double standardDayHours = attendanceProperties.getWorkdayHours();
+        double overtime = Math.max(0, hoursWorked - standardDayHours);
         open.setOvertimeHours(overtime);
 
         TimeEntry saved = timeEntryRepository.save(open);
