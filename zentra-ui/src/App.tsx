@@ -58,6 +58,11 @@ import TrainingDetails from './hr/features/training/pages/TrainingDetails.tsx';
 import TrainingForm from './hr/features/training/pages/TrainingForm.tsx';
 import StaffingNeedApp from "./hr/StaffingNeedApp";
 
+// Employee Self-Service imports
+import EmployeeDashboard from './hr/features/employee/pages/EmployeeDashboard.tsx';
+import EmployeeLeaveRequests from './hr/features/employee/pages/EmployeeLeaveRequests.tsx';
+import EmployeePayslips from './hr/features/employee/pages/EmployeePayslips.tsx';
+
 function App() {
     return (
         <BrowserRouter>
@@ -156,6 +161,11 @@ function App() {
                     <Route path="hr/pay/bonus-advance" element={<BonusAdvancePage />} />
                     <Route path="hr/contributions" element={<ContributionConfiguration />} />
                 </Route>
+
+                {/* Employee Self-Service Routes (Espace Employé) */}
+                <Route path="/employee" element={<EmployeeDashboard />} />
+                <Route path="/employee/:employeeId/leave-requests" element={<EmployeeLeaveRequests />} />
+                <Route path="/employee/:employeeId/payslips" element={<EmployeePayslips />} />
             </Routes>
         </BrowserRouter>
     );

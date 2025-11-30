@@ -19,13 +19,12 @@ public class LeaveRequestDto {
     private LocalDate endDate;
     private Double days;
     private String type;
-    private String status;
+    private LeaveRequestStatus status;
     private BigDecimal daysRequested;
     private String reason;
     private Long approverId;
     private String approverName;
     private LocalDateTime approvedAt;
-    private LeaveRequestStatus status;
     private Long approvedById;
     private String approvedByName;
     private LocalDate approvedDate;

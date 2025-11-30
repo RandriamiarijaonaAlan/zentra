@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface PayslipRepository extends JpaRepository<Payslip, Long> {
     
-    List<Payslip> findByEmployeeIdOrderByPeriodEndDesc(Long employeeId);
+    List<Payslip> findByEmployeeIdOrderByPayPeriodDesc(Long employeeId);
     
+    List<Payslip> findByEmployeeId(Long employeeId);
 }
